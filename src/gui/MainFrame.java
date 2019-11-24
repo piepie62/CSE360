@@ -55,7 +55,7 @@ public class MainFrame extends JFrame
 	private JButton deleteDataButton;
 
 	private JPanel topAnalyticsPanel;
-	
+
 	private JPanel analyticsPanel;
 	private JLabel analyticsLabel;
 	private JLabel numEntriesLabel;
@@ -85,18 +85,21 @@ public class MainFrame extends JFrame
 	private JTextArea graphTextArea;
 
 	int i = 0;
-	
+
 	/**
-	 * Constructor to create a MainFrame. Upon instantiation, the frame then needs to be set as visible to be shown to the user.
+	 * Constructor to create a MainFrame. Upon instantiation, the frame then needs
+	 * to be set as visible to be shown to the user.
 	 */
 	public MainFrame()
 	{
 		this.initComponents();
 	}
 
-	
 	/**
-	 * Initializes the entire GUI frame. This method initializes all of the individual components that go into the frame as well as places them in position. This is a long and complex method that should be ignored unless major changes to the GUI are needed.
+	 * Initializes the entire GUI frame. This method initializes all of the
+	 * individual components that go into the frame as well as places them in
+	 * position. This is a long and complex method that should be ignored unless
+	 * major changes to the GUI are needed.
 	 */
 	private void initComponents()
 	{
@@ -142,7 +145,7 @@ public class MainFrame extends JFrame
 		this.createReportMenuItem = new JMenuItem();
 		this.helpMenu = new JMenu();
 		this.displayErrorsMenuItem = new JMenuItem();
-	
+
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.setTitle("Grade Analytics");
 		this.setMaximumSize(new Dimension(840, 650));
@@ -150,27 +153,27 @@ public class MainFrame extends JFrame
 		this.setPreferredSize(new Dimension(840, 650));
 		this.setResizable(false);
 		this.setSize(new Dimension(840, 650));
-	
+
 		this.dataTable.setModel(new DefaultTableModel(new Object[][]{}, new String[]{"A", "B", "C", "D"})
 		{
-			
+
 			private static final long serialVersionUID = 1L;
 			boolean[] canEdit = new boolean[]{false, false, false, false};
 			Class<?>[] types = new Class[]{Float.class, Float.class, Float.class, Float.class};
-	
+
 			@Override
 			public Class<?> getColumnClass(int columnIndex)
 			{
 				return this.types[columnIndex];
 			}
-	
+
 			@Override
 			public boolean isCellEditable(int rowIndex, int columnIndex)
 			{
 				return this.canEdit[columnIndex];
 			}
 		});
-		
+
 		this.dataTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		this.dataTable.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		this.dataTable.setRowSelectionAllowed(false);
@@ -179,7 +182,7 @@ public class MainFrame extends JFrame
 		this.dataTable.getTableHeader().setReorderingAllowed(false);
 		this.dataTableScrollPane.setViewportView(this.dataTable);
 		this.dataTable.getColumnModel().getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
+
 		if(this.dataTable.getColumnModel().getColumnCount() > 0)
 		{
 			this.dataTable.getColumnModel().getColumn(0).setResizable(false);
@@ -187,7 +190,7 @@ public class MainFrame extends JFrame
 			this.dataTable.getColumnModel().getColumn(2).setResizable(false);
 			this.dataTable.getColumnModel().getColumn(3).setResizable(false);
 		}
-	
+
 		this.loadFileButton.setText("Load File");
 		this.loadFileButton.setMaximumSize(new Dimension(77, 50));
 		this.loadFileButton.setMinimumSize(new Dimension(77, 50));
@@ -200,7 +203,7 @@ public class MainFrame extends JFrame
 				MainFrame.this.loadFileButtonActionPerformed(evt);
 			}
 		});
-	
+
 		this.appendFileButton.setText("Append File");
 		this.appendFileButton.addActionListener(new ActionListener()
 		{
@@ -210,7 +213,7 @@ public class MainFrame extends JFrame
 				MainFrame.this.appendFileButtonActionPerformed(evt);
 			}
 		});
-	
+
 		this.insertDataButton.setText("Insert Data");
 		this.insertDataButton.addActionListener(new ActionListener()
 		{
@@ -220,7 +223,7 @@ public class MainFrame extends JFrame
 				MainFrame.this.insertDataButtonActionPerformed(evt);
 			}
 		});
-	
+
 		this.deleteDataButton.setText("Delete Data");
 		this.deleteDataButton.addActionListener(new ActionListener()
 		{
@@ -230,26 +233,26 @@ public class MainFrame extends JFrame
 				MainFrame.this.deleteDataButtonActionPerformed(evt);
 			}
 		});
-	
+
 		this.topAnalyticsPanel.setMaximumSize(new Dimension(414, 186));
 		this.topAnalyticsPanel.setMinimumSize(new Dimension(414, 186));
 		this.topAnalyticsPanel.setRequestFocusEnabled(false);
-	
+
 		this.analyticsLabel.setFont(new Font("Tahoma", 0, 18)); // NOI18N
 		this.analyticsLabel.setText("Analytics");
-	
+
 		this.modeLabel.setText("Mode:");
-	
+
 		this.medianLabel.setText("Median:");
-	
+
 		this.meanLabel.setText("Mean:");
-	
+
 		this.minGradeLabel.setText("Min Grade:");
-	
+
 		this.maxGradeLabel.setText("Max Grade:");
-	
+
 		this.numEntriesLabel.setText("Number of Entries:");
-	
+
 		GroupLayout analyticsPanelLayout = new GroupLayout(this.analyticsPanel);
 		this.analyticsPanel.setLayout(analyticsPanelLayout);
 		analyticsPanelLayout.setHorizontalGroup(analyticsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -262,12 +265,12 @@ public class MainFrame extends JFrame
 						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(this.maxGradeLabel).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(this.minGradeLabel)
 						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(this.meanLabel, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 						.addComponent(this.medianLabel).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(this.modeLabel).addContainerGap()));
-	
+
 		this.analyticsPanel.setVisible(false);
-	
+
 		this.distributionLabel.setFont(new Font("Tahoma", 0, 18)); // NOI18N
 		this.distributionLabel.setText("Distribution");
-	
+
 		this.percentage90Label.setText("90%-100%:");
 		this.percentage80Label.setText("80%-89%:");
 		this.percentage70Label.setText("70%-79%:");
@@ -278,7 +281,7 @@ public class MainFrame extends JFrame
 		this.percentage20Label.setText("20%-29%:");
 		this.percentage10Label.setText("10%-19%:");
 		this.percentage0Label.setText("0%-9%:");
-	
+
 		GroupLayout distributionPanelLayout = new GroupLayout(this.distributionPanel);
 		this.distributionPanel.setLayout(distributionPanelLayout);
 		distributionPanelLayout
@@ -300,18 +303,18 @@ public class MainFrame extends JFrame
 				.addGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(this.percentage60Label, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE).addComponent(this.percentage10Label))
 				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(this.percentage50Label).addComponent(this.percentage0Label))
 				.addGap(0, 0, Short.MAX_VALUE)));
-	
+
 		this.distributionPanel.setVisible(false);
-	
+
 		this.analyticsPanelSizePanel.setMaximumSize(new Dimension(10, 164));
 		this.analyticsPanelSizePanel.setMinimumSize(new Dimension(10, 164));
 		this.analyticsPanelSizePanel.setPreferredSize(new Dimension(10, 164));
-	
+
 		GroupLayout analyticsPanelSizePanelLayout = new GroupLayout(this.analyticsPanelSizePanel);
 		this.analyticsPanelSizePanel.setLayout(analyticsPanelSizePanelLayout);
 		analyticsPanelSizePanelLayout.setHorizontalGroup(analyticsPanelSizePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 10, Short.MAX_VALUE));
 		analyticsPanelSizePanelLayout.setVerticalGroup(analyticsPanelSizePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 164, Short.MAX_VALUE));
-	
+
 		GroupLayout topAnalyticsPanelLayout = new GroupLayout(this.topAnalyticsPanel);
 		this.topAnalyticsPanel.setLayout(topAnalyticsPanelLayout);
 		topAnalyticsPanelLayout.setHorizontalGroup(topAnalyticsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -324,25 +327,25 @@ public class MainFrame extends JFrame
 								.addComponent(this.distributionPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addComponent(this.analyticsPanelSizePanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addContainerGap()));
-	
+
 		this.graphTextArea.setColumns(20);
 		this.graphTextArea.setFont(new Font("Monospaced", 0, 11)); // NOI18N
 		this.graphTextArea.setRows(5);
 		this.graphTextArea.setText(
 				"\t|\n90%-100%|\n\t|\n 80%-89%|\n\t|\n 70%-79%|\n\t|\n 60%-69%|\n\t|\n 50%-59%|\n\t|\n 40%-49%|\n\t|\n 30%-39%|\n\t|\n 20%-29%|\n\t|\n 10%-19%|\n\t|\n   0%-9%|\n\t|___|___|___|___|___|___|___|___|___|___|___|___|\n       \t0  10  20  30  40  50  60  70  80  90  100 110  MAX");
 		this.graphTextArea.setEnabled(false);
-	
+
 		GroupLayout graphPanelLayout = new GroupLayout(this.graphPanel);
 		this.graphPanel.setLayout(graphPanelLayout);
 		graphPanelLayout.setHorizontalGroup(graphPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(graphPanelLayout.createSequentialGroup().addGap(0, 10, Short.MAX_VALUE).addComponent(this.graphTextArea, GroupLayout.PREFERRED_SIZE, 443, GroupLayout.PREFERRED_SIZE).addGap(0, 11, Short.MAX_VALUE)));
 		graphPanelLayout.setVerticalGroup(graphPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(graphPanelLayout.createSequentialGroup().addGap(0, 31, Short.MAX_VALUE).addComponent(this.graphTextArea, GroupLayout.PREFERRED_SIZE, 365, GroupLayout.PREFERRED_SIZE).addGap(0, 32, Short.MAX_VALUE)));
-	
+
 		this.graphTextArea.setVisible(false);
-	
+
 		this.dataMenu.setText("Data");
-	
+
 		this.loadDataMenuItem.setText("Load Data from File");
 		this.loadDataMenuItem.addActionListener(new ActionListener()
 		{
@@ -353,7 +356,7 @@ public class MainFrame extends JFrame
 			}
 		});
 		this.dataMenu.add(this.loadDataMenuItem);
-	
+
 		this.appendDataMenuItem.setText("Append Data from File");
 		this.appendDataMenuItem.addActionListener(new ActionListener()
 		{
@@ -364,7 +367,7 @@ public class MainFrame extends JFrame
 			}
 		});
 		this.dataMenu.add(this.appendDataMenuItem);
-	
+
 		this.setBoundariesMenuItem.setText("Set Boundaries");
 		this.setBoundariesMenuItem.addActionListener(new ActionListener()
 		{
@@ -375,11 +378,11 @@ public class MainFrame extends JFrame
 			}
 		});
 		this.dataMenu.add(this.setBoundariesMenuItem);
-	
+
 		this.menuBar.add(this.dataMenu);
-	
+
 		this.analyticsMenu.setText("Analytics");
-	
+
 		this.runAnalyticsMenuItem.setText("Run Analytics");
 		this.runAnalyticsMenuItem.addActionListener(new ActionListener()
 		{
@@ -390,7 +393,7 @@ public class MainFrame extends JFrame
 			}
 		});
 		this.analyticsMenu.add(this.runAnalyticsMenuItem);
-	
+
 		this.createGraphMenuItem.setText("Create Graph");
 		this.createGraphMenuItem.addActionListener(new ActionListener()
 		{
@@ -401,7 +404,7 @@ public class MainFrame extends JFrame
 			}
 		});
 		this.analyticsMenu.add(this.createGraphMenuItem);
-	
+
 		this.createReportMenuItem.setText("Create Report");
 		this.createReportMenuItem.addActionListener(new ActionListener()
 		{
@@ -412,11 +415,11 @@ public class MainFrame extends JFrame
 			}
 		});
 		this.analyticsMenu.add(this.createReportMenuItem);
-	
+
 		this.menuBar.add(this.analyticsMenu);
-	
+
 		this.helpMenu.setText("Help");
-	
+
 		this.displayErrorsMenuItem.setText("Display Errors");
 		this.displayErrorsMenuItem.addActionListener(new ActionListener()
 		{
@@ -427,11 +430,11 @@ public class MainFrame extends JFrame
 			}
 		});
 		this.helpMenu.add(this.displayErrorsMenuItem);
-	
+
 		this.menuBar.add(this.helpMenu);
-	
+
 		this.setJMenuBar(this.menuBar);
-	
+
 		GroupLayout layout = new GroupLayout(this.getContentPane());
 		this.getContentPane().setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(GroupLayout.Alignment.TRAILING,
@@ -456,37 +459,40 @@ public class MainFrame extends JFrame
 										.addComponent(this.deleteDataButton, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE).addGap(0, 399, Short.MAX_VALUE))
 								.addComponent(this.dataTableScrollPane))
 						.addContainerGap()));
-	
+
 		this.pack();
 	}
 
 	/**
-	 * Action for when the "Append Data" menu item is selected. Prompts the user to type a number that will then be inserted into the dataset.
+	 * Action for when the "Append Data" menu item is selected. Prompts the user to
+	 * type a number that will then be inserted into the dataset.
 	 *
-	 * @param evt the event that caused this action(Ignore)
+	 * @param evt
+	 *            the event that caused this action(Ignore)
 	 */
 	private void appendDataMenuItemActionPerformed(ActionEvent evt)
 	{
-		
-	}
-
-	/**
-	 * Action for when the "Append File" button is selected. Prompts the user to select a file that will then be inserted into the dataset.
-	 *
-	 * @param evt the event that caused this action(Ignore)
-	 */
-	private void appendFileButtonActionPerformed(ActionEvent evt)
-	{
-		//Test code
-		BoundarySetForm f = new BoundarySetForm(this, true);
-		f.setVisible(true);
 		this.showFileOpenDialog();
 	}
 
 	/**
-	 * Action for when the "Create Graph" menu item is selected. Will display and populate the graph based on the data supplied.
+	 * Action for when the "Append File" button is selected. Prompts the user to
+	 * select a file that will then be inserted into the dataset.
 	 *
-	 * @param evt the event that caused this action(Ignore)
+	 * @param evt
+	 *            the event that caused this action(Ignore)
+	 */
+	private void appendFileButtonActionPerformed(ActionEvent evt)
+	{
+		this.showFileOpenDialog();
+	}
+
+	/**
+	 * Action for when the "Create Graph" menu item is selected. Will display and
+	 * populate the graph based on the data supplied.
+	 *
+	 * @param evt
+	 *            the event that caused this action(Ignore)
 	 */
 	private void createGraphMenuItemActionPerformed(ActionEvent evt)
 	{
@@ -494,53 +500,115 @@ public class MainFrame extends JFrame
 	}
 
 	/**
-	 * Action for when the "Create Report" menu item is selected. It will generate a report based on all of the actions that have been performed then prompt the user to save it as a .txt file.
+	 * Action for when the "Create Report" menu item is selected. It will generate a
+	 * report based on all of the actions that have been performed then prompt the
+	 * user to save it as a .txt file.
 	 *
-	 * @param evt the event that caused this action(Ignore)
+	 * @param evt
+	 *            the event that caused this action(Ignore)
 	 */
 	private void createReportMenuItemActionPerformed(ActionEvent evt)
 	{
-		
+		// Generate report
+
+		// Note: file here may or may not have the correct extension
+		// Will have to add the .txt
+		File saveFile = showSaveReportDialog();
+
+		if(saveFile == null)
+		{
+			// Error handling
+		}
+		else
+		{
+			System.out.println(saveFile.getName());
+		}
 	}
 
 	/**
-	 * Action for when the "Delete Data" button is selected. It will prompt the user to enter a number to remove and remove it from the data set.
-	 * TODO: Make dialog box to prompt the user for a number to delete.
+	 * Action for when the "Delete Data" button is selected. It will prompt the user
+	 * to enter a number to remove and remove it from the data set. TODO: Make
+	 * dialog box to prompt the user for a number to delete.
 	 *
-	 * @param evt the event that caused this action(Ignore)
+	 * @param evt
+	 *            the event that caused this action(Ignore)
 	 */
 	private void deleteDataButtonActionPerformed(ActionEvent evt)
 	{
+		ValuePromptForm valueForm = new ValuePromptForm(this, true, "Enter a value to delete");
 		
+		Point dialogPosition = new Point();
+		dialogPosition.setLocation(this.getLocation());
+		dialogPosition.translate(this.getWidth() / 2, this.getHeight() / 2);
+
+		valueForm.setLocation(dialogPosition);
+		valueForm.setVisible(true);
+
+		// Wait for the form to be closed
+		while(valueForm.isDisplayable())
+		{
+
+		}
+
+		// Error handling: make sure the value entered is in the dataset
+
+		System.out.println("Value entered: " + valueForm.getValue());
 	}
 
 	/**
-	 * Action for when the "Display Errors" menu item is selected. Will display a dialog that will list all of the errors that have occurred in the current session.
-	 * TODO: Make dialog box to show the errors.
+	 * Action for when the "Display Errors" menu item is selected. Will display a
+	 * dialog that will list all of the errors that have occurred in the current
+	 * session. TODO: Make dialog box to show the errors.
 	 *
-	 * @param evt the event that caused this action(Ignore)
+	 * @param evt
+	 *            the event that caused this action(Ignore)
 	 */
 	private void displayErrorsMenuItemActionPerformed(ActionEvent evt)
 	{
+		ErrorForm errorDisplay = new ErrorForm(this, true);
 		
+		Point dialogPosition = new Point();
+		dialogPosition.setLocation(this.getLocation());
+		dialogPosition.translate(this.getWidth() / 2, this.getHeight() / 2);
+
+		errorDisplay.setLocation(dialogPosition);
+		errorDisplay.setVisible(true);
 	}
 
 	/**
-	 * Action for when the "Insert Data" button is selected. Prompts the user to type a number that will then be added to the dataset.
-	 * TODO: Make dialog box to ask for the number.
+	 * Action for when the "Insert Data" button is selected. Prompts the user to
+	 * type a number that will then be added to the dataset.
 	 *
-	 * @param evt the event that caused this action(Ignore)
+	 * @param evt
+	 *            the event that caused this action(Ignore)
 	 */
 	private void insertDataButtonActionPerformed(ActionEvent evt)
 	{
+		ValuePromptForm valueForm = new ValuePromptForm(this, true, "Enter a value to insert");
 		
+		Point dialogPosition = new Point();
+		dialogPosition.setLocation(this.getLocation());
+		dialogPosition.translate(this.getWidth() / 2, this.getHeight() / 2);
+
+		valueForm.setLocation(dialogPosition);
+		valueForm.setVisible(true);
+
+		// Wait for the form to be closed
+		while(valueForm.isDisplayable())
+		{
+
+		}
+
+		System.out.println("Value entered: " + valueForm.getValue());
 	}
 
 	/**
-	 * Action for when the "Load Data" menu item is selected. Prompts the user to open a supported file and then insert its contents into a new dataset.
-	 * This will also prompt the user to set the bounds on the current dataset.
+	 * Action for when the "Load Data" menu item is selected. Prompts the user to
+	 * open a supported file and then insert its contents into a new dataset. This
+	 * will also prompt the user to set the bounds on the current dataset.
 	 * 
-	 * @param evt the event that caused this action(Ignore)
+	 * @param evt
+	 *            the event that caused this action(Ignore)
 	 */
 	private void loadDataMenuItemActionPerformed(ActionEvent evt)
 	{
@@ -548,10 +616,12 @@ public class MainFrame extends JFrame
 	}
 
 	/**
-	 * Action for when the "Load File" button is selected. Prompts the user to open a supported file and then insert its contents into a new dataset.
-	 * This will also prompt the user to set the bounds on the current dataset.
+	 * Action for when the "Load File" button is selected. Prompts the user to open
+	 * a supported file and then insert its contents into a new dataset. This will
+	 * also prompt the user to set the bounds on the current dataset.
 	 * 
-	 * @param evt the event that caused this action(Ignore)
+	 * @param evt
+	 *            the event that caused this action(Ignore)
 	 */
 	private void loadFileButtonActionPerformed(ActionEvent evt)
 	{
@@ -560,26 +630,29 @@ public class MainFrame extends JFrame
 		{
 			tableModel.addRow(new Object[]{null, null, null, null});
 		}
-		tableModel.setValueAt(Float.valueOf((float) (this.i * 1.5781)), this.i / 4, this.i % 4);
+		tableModel.setValueAt((this.i * 1.5781), this.i / 4, this.i % 4);
 		this.i++;
 	}
 
 	/**
-	 * Action for when the "Run Analytics" menu item is selected. Populates the analytics area with the information about the current dataset.
+	 * Action for when the "Run Analytics" menu item is selected. Populates the
+	 * analytics area with the information about the current dataset.
 	 *
-	 * @param evt the event that caused this action(Ignore)
+	 * @param evt
+	 *            the event that caused this action(Ignore)
 	 */
 	private void runAnalyticsMenuItemActionPerformed(ActionEvent evt)
 	{
 		this.analyticsPanel.setVisible(!this.analyticsPanel.isVisible());
 		this.distributionPanel.setVisible(!this.distributionPanel.isVisible());
-
 	}
 
 	/**
-	 * The action for the menu item "Set Boundaries" is selected. Will show the BoundarySetForm to the user.
+	 * The action for the menu item "Set Boundaries" is selected. Will show the
+	 * BoundarySetForm to the user.
 	 *
-	 * @param evt the event that caused this action(Ignore)
+	 * @param evt
+	 *            the event that caused this action(Ignore)
 	 */
 	private void setBoundariesMenuItemActionPerformed(ActionEvent evt)
 	{
@@ -593,7 +666,9 @@ public class MainFrame extends JFrame
 	}
 
 	/**
-	 * Displays a file chooser dialog box to the user. The dialog will filter out all other files other than *.txt and *.csv. Returns null if the user cancels the dialog.
+	 * Displays a file chooser dialog box to the user. The dialog will filter out
+	 * all other files other than *.txt and *.csv. Returns null if the user cancels
+	 * the dialog.
 	 *
 	 * @return the chosen file
 	 */
@@ -601,9 +676,10 @@ public class MainFrame extends JFrame
 	{
 		JFileChooser fileChooser = new JFileChooser();
 
+		fileChooser.setDialogTitle("Open file");
 		fileChooser.setAcceptAllFileFilterUsed(false);
-		
-		//Adds the filter to ignore all other files but .txt and .csv
+
+		// Adds the filter to ignore all other files but .txt and .csv
 		fileChooser.addChoosableFileFilter(new FileFilter()
 		{
 			@Override
@@ -615,7 +691,7 @@ public class MainFrame extends JFrame
 				}
 
 				String extension = f.getName().substring(f.getName().lastIndexOf(".") + 1, f.getName().length());
-				
+
 				if(extension != null)
 				{
 					if(extension.equals("txt") || extension.equals("csv"))
@@ -640,6 +716,70 @@ public class MainFrame extends JFrame
 
 		int returnVal = fileChooser.showOpenDialog(this);
 
+		if(returnVal == JFileChooser.APPROVE_OPTION)
+		{
+			File file = fileChooser.getSelectedFile();
+			System.out.println(file.getName());
+			return file;
+		}
+		else
+		{
+			System.out.println("File Open Canceled by User");
+		}
+
+		return null;
+	}
+
+	/**
+	 * Displays a file chooser dialog box to the user. The dialog prompts the user
+	 * to enter a file to save. The dialog will filter out all other files other than
+	 * *.txt. Returns null if the user cancels the dialog.
+	 *
+	 * @return the chosen file
+	 */
+	private File showSaveReportDialog()
+	{
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Save file");
+
+		fileChooser.setAcceptAllFileFilterUsed(false);
+
+		// Adds the filter to ignore all other files but .txt and .csv
+		fileChooser.addChoosableFileFilter(new FileFilter()
+		{
+			@Override
+			public boolean accept(File f)
+			{
+				if(f.isDirectory())
+				{
+					return true;
+				}
+
+				String extension = f.getName().substring(f.getName().lastIndexOf(".") + 1, f.getName().length());
+
+				if(extension != null)
+				{
+					if(extension.equals("txt"))
+					{
+						return true;
+					}
+				}
+				else
+				{
+					return false;
+				}
+
+				return false;
+			}
+
+			@Override
+			public String getDescription()
+			{
+				return "*.txt";
+			}
+		});
+
+		int returnVal = fileChooser.showSaveDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION)
 		{
 			File file = fileChooser.getSelectedFile();

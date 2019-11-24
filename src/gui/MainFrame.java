@@ -6,7 +6,11 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -85,6 +89,10 @@ public class MainFrame extends JFrame
 	private JTextArea graphTextArea;
 
 	int i = 0;
+	String errors;
+	
+	float lower = 0;
+	float upper = 100;
 
 	/**
 	 * Constructor to create a MainFrame. Upon instantiation, the frame then needs
@@ -472,7 +480,8 @@ public class MainFrame extends JFrame
 	 */
 	private void appendDataMenuItemActionPerformed(ActionEvent evt)
 	{
-		this.showFileOpenDialog();
+		File file = this.showFileOpenDialog();
+		parseFile(file);
 	}
 
 	/**
@@ -484,7 +493,8 @@ public class MainFrame extends JFrame
 	 */
 	private void appendFileButtonActionPerformed(ActionEvent evt)
 	{
-		this.showFileOpenDialog();
+		File file = this.showFileOpenDialog();
+		parseFile(file);
 	}
 
 	/**
@@ -625,13 +635,10 @@ public class MainFrame extends JFrame
 	 */
 	private void loadFileButtonActionPerformed(ActionEvent evt)
 	{
-		DefaultTableModel tableModel = (DefaultTableModel) this.dataTable.getModel();
-		if((this.i % 4) == 0)
-		{
-			tableModel.addRow(new Object[]{null, null, null, null});
-		}
-		tableModel.setValueAt((this.i * 1.5781), this.i / 4, this.i % 4);
-		this.i++;
+		setBounds();
+		clearData();
+		File file = this.showFileOpenDialog();
+		parseFile(file);
 	}
 
 	/**
@@ -656,13 +663,7 @@ public class MainFrame extends JFrame
 	 */
 	private void setBoundariesMenuItemActionPerformed(ActionEvent evt)
 	{
-		BoundarySetForm boundsDialog = new BoundarySetForm(this, true);
-		Point dialogPosition = new Point();
-		dialogPosition.setLocation(this.getLocation());
-		dialogPosition.translate(this.getWidth() / 2, this.getHeight() / 2);
-
-		boundsDialog.setLocation(dialogPosition);
-		boundsDialog.setVisible(true);
+		setBounds();
 	}
 
 	/**
@@ -792,5 +793,73 @@ public class MainFrame extends JFrame
 		}
 
 		return null;
+	}
+	
+	private void addValue(float value)
+	{
+		DefaultTableModel tableModel = (DefaultTableModel) this.dataTable.getModel();
+		if((this.i % 4) == 0)
+		{
+			tableModel.addRow(new Object[]{null, null, null, null});
+		}
+		if (checkBounds(value))
+		{
+			tableModel.setValueAt(value, this.i / 4, this.i % 4);
+			this.i++;
+		}
+		else
+		{
+			errors = errors + "\n" + value + " is not in range " + lower + "-" + upper;
+		}
+	}
+	
+	private void clearData()
+	{
+		DefaultTableModel tableModel = (DefaultTableModel) this.dataTable.getModel();
+		int count = tableModel.getRowCount();
+		for (int i = count; i > 0; i--)
+		{
+			tableModel.removeRow(i - 1);
+		}
+		i = 0;
+	}
+	
+	private void parseFile(File file)
+	{
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(file));
+			String line = in.readLine();
+			while (line != null) {
+				String[] numbers = line.split(",");
+				for (String num : numbers)
+				{
+					addValue(Float.parseFloat(num));
+				}
+				line = in.readLine();
+			}
+			in.close();
+		} catch (FileNotFoundException e) {
+			errors = errors + "\n" + e.getMessage();
+		} catch (IOException e) {
+			errors = errors + "\n" + e.getMessage();
+		} catch (NumberFormatException e) {
+			errors = errors + "\n" + e.getMessage();
+		}
+	}
+	
+	private void setBounds()
+	{
+		BoundarySetForm boundsDialog = new BoundarySetForm(this, true);
+		Point dialogPosition = new Point();
+		dialogPosition.setLocation(this.getLocation());
+		dialogPosition.translate(this.getWidth() / 2, this.getHeight() / 2);
+
+		boundsDialog.setLocation(dialogPosition);
+		boundsDialog.setVisible(true);
+	}
+	
+	private boolean checkBounds(float value)
+	{
+		return lower <= value && upper >= value;
 	}
 }

@@ -81,7 +81,19 @@ public class BoundarySetForm extends JDialog
 	
 	private void setBoundaryButtonActionPerformed(ActionEvent evt)
 	{
-		//TODO: send the bounds information to the MainFrame or somewhere into the backend.
+		String lowText = this.lowBoundaryField.getText();
+		String highText = this.highBoundaryField.getText();
+		
+		try {
+			float lower = Float.parseFloat(lowText);
+			float higher = Float.parseFloat(highText);
+			parentFrame.lower = lower;
+			parentFrame.upper = higher;
+		} catch (NumberFormatException e)
+		{
+			parentFrame.errors = parentFrame.errors + "\n" + e.getMessage();
+		}
+
 		this.dispose();
 	}
 }

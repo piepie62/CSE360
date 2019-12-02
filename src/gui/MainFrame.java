@@ -584,7 +584,13 @@ public class MainFrame extends JFrame
 		errorDisplay.setLocation(dialogPosition);
 		errorDisplay.setVisible(true);
 	}
-
+	/**
+	 * Returns the errors string, used to get errors to the error display. (currently not functional)
+	 */
+	protected String getErrors()
+	{
+		return errors;
+	}
 	/**
 	 * Action for when the "Insert Data" button is selected. Prompts the user to
 	 * type a number that will then be added to the dataset.
@@ -795,7 +801,7 @@ public class MainFrame extends JFrame
 		return null;
 	}
 	
-	private void addValue(float value)
+	private boolean addValue(float value)
 	{
 		DefaultTableModel tableModel = (DefaultTableModel) this.dataTable.getModel();
 		if((this.i % 4) == 0)
@@ -806,10 +812,11 @@ public class MainFrame extends JFrame
 		{
 			tableModel.setValueAt(value, this.i / 4, this.i % 4);
 			this.i++;
+			return true;
 		}
 		else
 		{
-			errors = errors + "\n" + value + " is not in range " + lower + "-" + upper;
+			return false;
 		}
 	}
 	
@@ -828,12 +835,20 @@ public class MainFrame extends JFrame
 	{
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(file));
+			boolean valueCheck = false;
+			int currentValue = 0;
 			String line = in.readLine();
 			while (line != null) {
 				String[] numbers = line.split(",");
 				for (String num : numbers)
 				{
-					addValue(Float.parseFloat(num));
+					valueCheck = addValue(Float.parseFloat(num));
+					if(!valueCheck)
+					{
+						errors = errors + "\n" + "Entry number " + currentValue + " from " + file.getName() 
+								+ " (" + num + ") is not in range " + lower + "-" + upper;
+					}
+					
 				}
 				line = in.readLine();
 			}
@@ -843,6 +858,8 @@ public class MainFrame extends JFrame
 		} catch (IOException e) {
 			errors = errors + "\n" + e.getMessage();
 		} catch (NumberFormatException e) {
+			errors = errors + "\n" + e.getMessage();
+		} catch (NullPointerException e) {
 			errors = errors + "\n" + e.getMessage();
 		}
 	}

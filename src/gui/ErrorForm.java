@@ -18,6 +18,7 @@ public class ErrorForm extends JDialog
 	private JScrollPane errorScrollPane;
 	private JTextArea errorTextArea;
 	private JButton closeButton;
+	//private String errors;
 
 	public ErrorForm(MainFrame parent, boolean modal)
 	{
@@ -25,6 +26,7 @@ public class ErrorForm extends JDialog
 		this.initComponents();
 		
 		//Get error data from the backend
+		////errors = parent.getErrors(); // this might not work right I guess
 	}
 
 	private void initComponents()
@@ -40,6 +42,7 @@ public class ErrorForm extends JDialog
 		this.errorTextArea.setLineWrap(true);
 		this.errorTextArea.setRows(5);
 		this.errorTextArea.setEnabled(false);
+		//this.errorTextArea.setText(this.errors);
 		this.errorScrollPane.setViewportView(this.errorTextArea);
 	
 		this.closeButton.setText("Close");

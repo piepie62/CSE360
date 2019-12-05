@@ -106,6 +106,17 @@ public class MainFrame extends JFrame
 	int numbers80Count = 0;
 	int numbers90Count = 0;
 	
+	float numbers0Total = 0;
+	float numbers10Total = 0;
+	float numbers20Total = 0;
+	float numbers30Total = 0;
+	float numbers40Total = 0;
+	float numbers50Total = 0;
+	float numbers60Total = 0;
+	float numbers70Total = 0;
+	float numbers80Total = 0;
+	float numbers90Total = 0;
+	
 	String numbers0Bar = "";
 	String numbers10Bar = "";
 	String numbers20Bar = "";
@@ -942,42 +953,52 @@ public class MainFrame extends JFrame
 		if(value >= 0 && value < 10)
 		{
 			numbers0Count++;
+			numbers0Total = numbers0Total + value;
 		}
 		else if(value >= 10 && value < 20)
 		{
 			numbers10Count++;
+			numbers10Total = numbers10Total + value;
 		}
 		else if(value >= 20 && value < 30)
 		{
 			numbers20Count++;
+			numbers20Total = numbers20Total + value;
 		}
 		else if(value >= 30 && value < 40)
 		{
 			numbers30Count++;
+			numbers30Total = numbers30Total + value;
 		}
 		else if(value >= 40 && value < 50)
 		{
 			numbers40Count++;
+			numbers40Total = numbers40Total + value;
 		}
 		else if(value >= 50 && value < 60)
 		{
 			numbers50Count++;
+			numbers50Total = numbers50Total + value;
 		}
 		else if(value >= 60 && value < 70)
 		{
 			numbers60Count++;
+			numbers60Total = numbers60Total + value;
 		}
 		else if(value >= 70 && value < 80)
 		{
 			numbers70Count++;
+			numbers70Total = numbers70Total + value;
 		}
 		else if(value >= 80 && value < 90)
 		{
 			numbers80Count++;
+			numbers80Total = numbers80Total + value;
 		}
 		else if(value >= 90 && value <= 100)
 		{
 			numbers90Count++;
+			numbers90Total = numbers90Total + value;
 		}
 	}
 	
@@ -1005,16 +1026,16 @@ public class MainFrame extends JFrame
 	 */
 	private void setAnalytics()
 	{
-		this.percentage90Label.setText("90%-100%:" + numbers90Count);
-		this.percentage80Label.setText("80%-89%:" + numbers80Count);
-		this.percentage70Label.setText("70%-79%:" + numbers70Count);
-		this.percentage60Label.setText("60%-69%:" + numbers60Count);
-		this.percentage50Label.setText("50%-59%:" + numbers50Count);
-		this.percentage40Label.setText("40%-49%:" + numbers40Count);
-		this.percentage30Label.setText("30%-39%:" + numbers30Count);
-		this.percentage20Label.setText("20%-29%:" + numbers20Count);
-		this.percentage10Label.setText("10%-19%:" + numbers10Count);
-		this.percentage0Label.setText("0%-9%:" + numbers0Count);
+		this.percentage90Label.setText("90%-100%:" + (numbers90Total / numbers90Count));
+		this.percentage80Label.setText("80%-89%:" + (numbers80Total / numbers80Count));
+		this.percentage70Label.setText("70%-79%:" + (numbers70Total / numbers70Count));
+		this.percentage60Label.setText("60%-69%:" + (numbers60Total / numbers60Count));
+		this.percentage50Label.setText("50%-59%:" + (numbers50Total / numbers50Count));
+		this.percentage40Label.setText("40%-49%:" + (numbers40Total / numbers40Count));
+		this.percentage30Label.setText("30%-39%:" + (numbers30Total / numbers30Count));
+		this.percentage20Label.setText("20%-29%:" + (numbers20Total / numbers20Count));
+		this.percentage10Label.setText("10%-19%:" + (numbers10Total / numbers10Count));
+		this.percentage0Label.setText("0%-9%:" + (numbers0Total / numbers0Count));
 	}
 	
 	/**

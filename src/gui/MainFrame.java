@@ -956,6 +956,14 @@ public class MainFrame extends JFrame
 		}
 	}
 	
+	/**
+	 * Calculates the number of hyphens needed to fill out each bar in the graph.
+	 * 
+	 * @param bar	the String of hyphens (empty when called)
+	 * @param amount	the amount of grades between a specific percentage
+	 * @return the String of hyphens
+	 */
+	
 	private String calculateGraphBars(String bar, int amount)
 	{
 		int hyphens = ((amount * 4) / 10) - 1;

@@ -92,7 +92,7 @@ public class MainFrame extends JFrame
 
 	private List<Float> dataList = new ArrayList<Float>();
 	int i = 0;
-	String errors;
+	String errors = "";
 	String[] numbers;
 	
 	int numbers0Count = 0;
@@ -105,7 +105,7 @@ public class MainFrame extends JFrame
 	int numbers70Count = 0;
 	int numbers80Count = 0;
 	int numbers90Count = 0;
-	
+
 	float numbers0Total = 0;
 	float numbers10Total = 0;
 	float numbers20Total = 0;
@@ -127,10 +127,12 @@ public class MainFrame extends JFrame
 	String numbers70Bar = "";
 	String numbers80Bar = "";
 	String numbers90Bar = "";
-	
+	boolean firstData = true;
+	boolean addedValue = false;
 	float lower = 0;
 	float upper = 100;
-
+	float maxGrade = -1000000000;
+	float minGrade = 1000000000;
 	/**
 	 * Constructor to create a MainFrame. Upon instantiation, the frame then needs
 	 * to be set as visible to be shown to the user.
@@ -506,7 +508,8 @@ public class MainFrame extends JFrame
 	private void appendDataMenuItemActionPerformed(ActionEvent evt)
 	{
 		File file = this.showFileOpenDialog();
-		parseFile(file);
+		if(file != null)
+			parseFile(file);
 	}
 
 	/**
@@ -519,7 +522,8 @@ public class MainFrame extends JFrame
 	private void appendFileButtonActionPerformed(ActionEvent evt)
 	{
 		File file = this.showFileOpenDialog();
-		parseFile(file);
+		if(file != null)
+			parseFile(file);
 	}
 
 	/**
@@ -651,20 +655,25 @@ public class MainFrame extends JFrame
 		Point dialogPosition = new Point();
 		dialogPosition.setLocation(this.getLocation());
 		dialogPosition.translate(this.getWidth() / 2, this.getHeight() / 2);
-
+		errorDisplay.setErrors(errors);
 		errorDisplay.setLocation(dialogPosition);
 		errorDisplay.setVisible(true);
 	}
 
 	/**
 	 * Action for when the "Insert Data" button is selected. Prompts the user to
-	 * type a number that will then be added to the dataset.
+	 * type a number that will then be added to the data set. If this is the
+	 * first data being input, prompts the user to set the bounds of the data set.
 	 *
 	 * @param evt
 	 *            the event that caused this action(Ignore)
 	 */
 	private void insertDataButtonActionPerformed(ActionEvent evt)
 	{
+		if(firstData)
+		{
+			setBounds();
+		}
 		ValuePromptForm valueForm = new ValuePromptForm(this, true, "Enter a value to insert");
 		
 		Point dialogPosition = new Point();
@@ -681,7 +690,6 @@ public class MainFrame extends JFrame
 		}
 		
 		addValue(valueForm.getValue());
-		
 		setAnalytics();
 		setGraph();
 		
@@ -712,9 +720,13 @@ public class MainFrame extends JFrame
 	private void loadFileButtonActionPerformed(ActionEvent evt)
 	{
 		setBounds();
-		clearData();
 		File file = this.showFileOpenDialog();
-		parseFile(file);
+		if(file != null)
+		{
+			clearData();
+			firstData = true;
+			parseFile(file);
+		}
 	}
 
 	/**
@@ -727,8 +739,12 @@ public class MainFrame extends JFrame
 	private void runAnalyticsMenuItemActionPerformed(ActionEvent evt)
 	{
 		setAnalytics();
-		this.analyticsPanel.setVisible(!this.analyticsPanel.isVisible());
-		this.distributionPanel.setVisible(!this.distributionPanel.isVisible());
+		// see no point in re-hiding the panel after first showing it if the analytics are run again,
+		// since the values still update with them always showing
+		if(!this.analyticsPanel.isVisible())
+			this.analyticsPanel.setVisible(true);
+		if(!this.distributionPanel.isVisible())
+			this.distributionPanel.setVisible(true);
 	}
 
 	/**
@@ -875,7 +891,7 @@ public class MainFrame extends JFrame
 	private void addValue(float value)
 	{
 		DefaultTableModel tableModel = (DefaultTableModel) this.dataTable.getModel();
-		if((this.i % 4) == 0)
+		if(firstData || addedValue && (this.i % 4) == 0)
 		{
 			tableModel.addRow(new Object[]{null, null, null, null});
 		}
@@ -884,10 +900,25 @@ public class MainFrame extends JFrame
 			tableModel.setValueAt(value, this.i / 4, this.i % 4);
 			this.i++;
 			this.dataList.add(value);
+			if(value < this.minGrade)
+			{
+				this.minGrade = value;
+			}
+			if(value > this.maxGrade)
+			{
+				this.maxGrade = value;
+			}
+			addedValue = true;
+			firstData = false;
 		}
 		else
 		{
-			errors = errors + "\n" + value + " is not in range " + lower + "-" + upper;
+			addedValue = false;
+			if(errors != "")
+			{
+				errors += "\n";
+			}
+			errors = errors + value + " is not in range " + lower + " - " + upper;
 		}
 		
 		calculatePartitions(value);
@@ -909,11 +940,18 @@ public class MainFrame extends JFrame
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(file));
 			String line = in.readLine();
+			int lineNum = 0;
 			while (line != null) {
+				lineNum++;
 				numbers = line.split(",");
 				for (String num : numbers)
 				{
 					addValue(Float.parseFloat(num));
+					if(!addedValue)
+					{
+						errors += "\n\t Value located in " + file.getName()
+								+ " Line " + lineNum;
+					}
 				}
 				line = in.readLine();
 			}
@@ -1020,12 +1058,76 @@ public class MainFrame extends JFrame
 		
 		return bar;
 	}
-	
+	/**
+	 * Finds the mean of the current data set.
+	 * 
+	 * @return the mean of the data
+	 */
+	private float findMean()
+	{
+		float total = 0;
+		for(int meanLoop = 0; meanLoop < this.dataList.size(); meanLoop++)
+		{
+			total += this.dataList.get(meanLoop);
+		}
+		return total / (float)this.dataList.size();
+	}
+	/**
+	 * Finds the median of the current data set.
+	 * 
+	 * @return the median of the data
+	 */
+	private float findMedian()
+	{
+		List<Float> listCopy = new ArrayList<>(dataList);
+		listCopy.sort(null);
+		return listCopy.get(this.i / 2);
+	}
+	/**
+	 * Finds the float of the current data set.
+	 * 
+	 * @return	the mode of the data
+	 */
+	private float findMode()
+	{
+		int currentCount = 1;
+		int maxCount = 0;
+		float mode = this.dataList.get(0);
+		for(int modeLoop = 0; modeLoop < this.dataList.size(); modeLoop++)
+		{
+			for(int inModeLoop = 0; inModeLoop < this.dataList.size(); inModeLoop++)
+			{
+				//System.out.println(this.dataList.get(inModeLoop) + " == " + this.dataList.get(modeLoop) + " ?");
+				if((float)this.dataList.get(inModeLoop) == (float)this.dataList.get(modeLoop))
+				{
+					//System.out.println("yes, adding");
+					currentCount++;
+				}
+			}
+			if(currentCount > maxCount)
+			{
+				//System.out.println("found new mode");
+				maxCount = currentCount;
+				mode = dataList.get(modeLoop);
+			}
+			currentCount = 1;
+		}
+		return mode;
+	}
 	/**
 	 * Sets the analytics and distribution values.
 	 */
 	private void setAnalytics()
 	{
+		this.numEntriesLabel.setText("Number of Entries: " + this.i);
+		if(!firstData)
+		{
+			this.maxGradeLabel.setText("Max Grade: " + this.maxGrade);
+			this.minGradeLabel.setText("Min Grade: " + this.minGrade);
+		}
+		this.meanLabel.setText("Mean: " + findMean());
+		this.medianLabel.setText("Median: " + findMedian());
+		this.modeLabel.setText("Mode: " + findMode());
 		this.percentage90Label.setText("90%-100%:" + (numbers90Total / numbers90Count));
 		this.percentage80Label.setText("80%-89%:" + (numbers80Total / numbers80Count));
 		this.percentage70Label.setText("70%-79%:" + (numbers70Total / numbers70Count));

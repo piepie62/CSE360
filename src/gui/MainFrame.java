@@ -122,7 +122,6 @@ public class MainFrame extends JFrame
 	float upper = 100;
 	float maxGrade = -1000000000;
 	float minGrade = 1000000000;
-
 	/**
 	 * Constructor to create a MainFrame. Upon instantiation, the frame then needs
 	 * to be set as visible to be shown to the user.
@@ -1033,7 +1032,53 @@ public class MainFrame extends JFrame
 		
 		return bar;
 	}
-	
+	/*
+	 * Finds the mean of the current data set
+	 */
+	private float findMean()
+	{
+		float total = 0;
+		for(int meanLoop = 0; meanLoop < this.dataList.size(); meanLoop++)
+		{
+			total += this.dataList.get(meanLoop);
+		}
+		return total / (float)this.dataList.size();
+	}
+	/*
+	 * Finds the median of the current data set
+	 */
+	private float findMedian()
+	{
+		List<Float> listCopy = new ArrayList<>(dataList);
+		listCopy.sort(null);
+		return listCopy.get(listCopy.size() / 2);
+	}
+	/*
+	 * Finds the mode of the current data set
+	 */
+	private float findMode()
+	{
+		int currentCount = 1;
+		int maxCount = 1;
+		float mode = this.dataList.get(0);
+		for(int modeLoop = 0; modeLoop < this.dataList.size(); modeLoop++)
+		{
+			for(int inModeLoop = 0; inModeLoop < this.dataList.size(); inModeLoop++)
+			{
+				if(this.dataList.get(inModeLoop) == this.dataList.get(modeLoop))
+				{
+					currentCount++;
+				}
+			}
+			if(currentCount > maxCount)
+			{
+				maxCount = currentCount;
+				mode = dataList.get(modeLoop);
+			}
+			currentCount = 1;
+		}
+		return mode;
+	}
 	/**
 	 * Sets the analytics and distribution values.
 	 */
@@ -1045,9 +1090,9 @@ public class MainFrame extends JFrame
 			this.maxGradeLabel.setText("Max Grade: " + this.maxGrade);
 			this.minGradeLabel.setText("Min Grade: " + this.minGrade);
 		}
-		this.meanLabel.setText("Mean: ");
-		this.medianLabel.setText("Median: ");
-		this.modeLabel.setText("Mode: ");
+		this.meanLabel.setText("Mean: " + findMean());
+		this.medianLabel.setText("Median: " + findMedian());
+		this.modeLabel.setText("Mode: " + findMode());
 		this.percentage90Label.setText("90%-100%: " + numbers90Count);
 		this.percentage80Label.setText("80%-89%: " + numbers80Count);
 		this.percentage70Label.setText("70%-79%: " + numbers70Count);

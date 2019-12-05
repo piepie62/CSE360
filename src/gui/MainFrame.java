@@ -92,7 +92,7 @@ public class MainFrame extends JFrame
 
 	private List<Float> dataList = new ArrayList<Float>();
 	int i = 0;
-	String errors;
+	String errors = "";
 	String[] numbers;
 	
 	int numbers0Count = 0;
@@ -120,6 +120,8 @@ public class MainFrame extends JFrame
 	boolean addedValue = false;
 	float lower = 0;
 	float upper = 100;
+	float maxGrade = -1000000000;
+	float minGrade = 1000000000;
 
 	/**
 	 * Constructor to create a MainFrame. Upon instantiation, the frame then needs
@@ -641,14 +643,15 @@ public class MainFrame extends JFrame
 		Point dialogPosition = new Point();
 		dialogPosition.setLocation(this.getLocation());
 		dialogPosition.translate(this.getWidth() / 2, this.getHeight() / 2);
-
+		errorDisplay.setErrors(errors);
 		errorDisplay.setLocation(dialogPosition);
 		errorDisplay.setVisible(true);
 	}
 
 	/**
 	 * Action for when the "Insert Data" button is selected. Prompts the user to
-	 * type a number that will then be added to the dataset.
+	 * type a number that will then be added to the data set. If this is the
+	 * first data being input, prompts the user to set the bounds of the data set.
 	 *
 	 * @param evt
 	 *            the event that caused this action(Ignore)
@@ -675,7 +678,6 @@ public class MainFrame extends JFrame
 		}
 		
 		addValue(valueForm.getValue());
-		firstData = false;
 		setAnalytics();
 		setGraph();
 		
@@ -707,9 +709,9 @@ public class MainFrame extends JFrame
 	{
 		setBounds();
 		clearData();
+		firstData = true;
 		File file = this.showFileOpenDialog();
 		parseFile(file);
-		firstData = false;
 	}
 
 	/**
@@ -722,8 +724,12 @@ public class MainFrame extends JFrame
 	private void runAnalyticsMenuItemActionPerformed(ActionEvent evt)
 	{
 		setAnalytics();
-		this.analyticsPanel.setVisible(!this.analyticsPanel.isVisible());
-		this.distributionPanel.setVisible(!this.distributionPanel.isVisible());
+		// see no point in re-hiding the panel after first showing it if the analytics are run again,
+		// since the values still update with them always showing
+		if(!this.analyticsPanel.isVisible())
+			this.analyticsPanel.setVisible(true);
+		if(!this.distributionPanel.isVisible())
+			this.distributionPanel.setVisible(true);
 	}
 
 	/**
@@ -874,17 +880,30 @@ public class MainFrame extends JFrame
 		{
 			tableModel.addRow(new Object[]{null, null, null, null});
 		}
-		addedValue = true;
 		if (checkBounds(value))
 		{
 			tableModel.setValueAt(value, this.i / 4, this.i % 4);
 			this.i++;
 			this.dataList.add(value);
+			if(value < this.minGrade)
+			{
+				this.minGrade = value;
+			}
+			if(value > this.maxGrade)
+			{
+				this.maxGrade = value;
+			}
+			addedValue = true;
+			firstData = false;
 		}
 		else
 		{
 			addedValue = false;
-			errors = errors + "\n" + value + " is not in range " + lower + "-" + upper;
+			if(errors != "")
+			{
+				errors += "\n";
+			}
+			errors = errors + value + " is not in range " + lower + " - " + upper;
 		}
 		
 		calculatePartitions(value);
@@ -906,11 +925,18 @@ public class MainFrame extends JFrame
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(file));
 			String line = in.readLine();
+			int lineNum = 0;
 			while (line != null) {
+				lineNum++;
 				numbers = line.split(",");
 				for (String num : numbers)
 				{
 					addValue(Float.parseFloat(num));
+					if(!addedValue)
+					{
+						errors += "\n\t Value located in " + file.getName()
+								+ " Line " + lineNum;
+					}
 				}
 				line = in.readLine();
 			}
@@ -1013,16 +1039,25 @@ public class MainFrame extends JFrame
 	 */
 	private void setAnalytics()
 	{
-		this.percentage90Label.setText("90%-100%:" + numbers90Count);
-		this.percentage80Label.setText("80%-89%:" + numbers80Count);
-		this.percentage70Label.setText("70%-79%:" + numbers70Count);
-		this.percentage60Label.setText("60%-69%:" + numbers60Count);
-		this.percentage50Label.setText("50%-59%:" + numbers50Count);
-		this.percentage40Label.setText("40%-49%:" + numbers40Count);
-		this.percentage30Label.setText("30%-39%:" + numbers30Count);
-		this.percentage20Label.setText("20%-29%:" + numbers20Count);
-		this.percentage10Label.setText("10%-19%:" + numbers10Count);
-		this.percentage0Label.setText("0%-9%:" + numbers0Count);
+		this.numEntriesLabel.setText("Number of Entries: " + this.i);
+		if(!firstData)
+		{
+			this.maxGradeLabel.setText("Max Grade: " + this.maxGrade);
+			this.minGradeLabel.setText("Min Grade: " + this.minGrade);
+		}
+		this.meanLabel.setText("Mean: ");
+		this.medianLabel.setText("Median: ");
+		this.modeLabel.setText("Mode: ");
+		this.percentage90Label.setText("90%-100%: " + numbers90Count);
+		this.percentage80Label.setText("80%-89%: " + numbers80Count);
+		this.percentage70Label.setText("70%-79%: " + numbers70Count);
+		this.percentage60Label.setText("60%-69%: " + numbers60Count);
+		this.percentage50Label.setText("50%-59%: " + numbers50Count);
+		this.percentage40Label.setText("40%-49%: " + numbers40Count);
+		this.percentage30Label.setText("30%-39%: " + numbers30Count);
+		this.percentage20Label.setText("20%-29%: " + numbers20Count);
+		this.percentage10Label.setText("10%-19%: " + numbers10Count);
+		this.percentage0Label.setText("0%-9%: " + numbers0Count);
 	}
 	
 	/**

@@ -18,15 +18,11 @@ public class ErrorForm extends JDialog
 	private JScrollPane errorScrollPane;
 	private JTextArea errorTextArea;
 	private JButton closeButton;
-	//private String errors;
 
 	public ErrorForm(MainFrame parent, boolean modal)
 	{
 		super(parent, modal);
 		this.initComponents();
-		
-		//Get error data from the backend
-		////errors = parent.getErrors(); // this might not work right I guess
 	}
 
 	private void initComponents()
@@ -42,7 +38,6 @@ public class ErrorForm extends JDialog
 		this.errorTextArea.setLineWrap(true);
 		this.errorTextArea.setRows(5);
 		this.errorTextArea.setEnabled(false);
-		//this.errorTextArea.setText(this.errors);
 		this.errorScrollPane.setViewportView(this.errorTextArea);
 	
 		this.closeButton.setText("Close");
@@ -64,7 +59,23 @@ public class ErrorForm extends JDialog
 	
 		this.pack();
 	}
-
+	/**
+	 * Sets the text of the error form to the errors from the current session,
+	 *
+	 * @param e
+	 *            A string containing the errors from the current session
+	 */
+	protected void setErrors(String e)
+	{
+		this.errorTextArea.setText(e);
+	}
+	/**
+	 * Action for when the "Close" button is selected. Exits the current 
+	 * window.
+	 *
+	 * @param evt
+	 *            the event that caused this action(Ignore)
+	 */
 	private void closeButtonActionPerformed(ActionEvent evt)
 	{
 		this.dispose();

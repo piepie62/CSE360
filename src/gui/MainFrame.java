@@ -497,7 +497,8 @@ public class MainFrame extends JFrame
 	private void appendDataMenuItemActionPerformed(ActionEvent evt)
 	{
 		File file = this.showFileOpenDialog();
-		parseFile(file);
+		if(file != null)
+			parseFile(file);
 	}
 
 	/**
@@ -510,7 +511,8 @@ public class MainFrame extends JFrame
 	private void appendFileButtonActionPerformed(ActionEvent evt)
 	{
 		File file = this.showFileOpenDialog();
-		parseFile(file);
+		if(file != null)
+			parseFile(file);
 	}
 
 	/**
@@ -707,10 +709,13 @@ public class MainFrame extends JFrame
 	private void loadFileButtonActionPerformed(ActionEvent evt)
 	{
 		setBounds();
-		clearData();
-		firstData = true;
 		File file = this.showFileOpenDialog();
-		parseFile(file);
+		if(file != null)
+		{
+			clearData();
+			firstData = true;
+			parseFile(file);
+		}
 	}
 
 	/**
@@ -1051,7 +1056,7 @@ public class MainFrame extends JFrame
 	{
 		List<Float> listCopy = new ArrayList<>(dataList);
 		listCopy.sort(null);
-		return listCopy.get(listCopy.size() / 2);
+		return listCopy.get(this.i / 2);
 	}
 	/*
 	 * Finds the mode of the current data set
@@ -1059,19 +1064,22 @@ public class MainFrame extends JFrame
 	private float findMode()
 	{
 		int currentCount = 1;
-		int maxCount = 1;
+		int maxCount = 0;
 		float mode = this.dataList.get(0);
 		for(int modeLoop = 0; modeLoop < this.dataList.size(); modeLoop++)
 		{
 			for(int inModeLoop = 0; inModeLoop < this.dataList.size(); inModeLoop++)
 			{
-				if(this.dataList.get(inModeLoop) == this.dataList.get(modeLoop))
+				//System.out.println(this.dataList.get(inModeLoop) + " == " + this.dataList.get(modeLoop) + " ?");
+				if((float)this.dataList.get(inModeLoop) == (float)this.dataList.get(modeLoop))
 				{
+					//System.out.println("yes, adding");
 					currentCount++;
 				}
 			}
 			if(currentCount > maxCount)
 			{
+				//System.out.println("found new mode");
 				maxCount = currentCount;
 				mode = dataList.get(modeLoop);
 			}

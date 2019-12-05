@@ -90,6 +90,30 @@ public class MainFrame extends JFrame
 
 	int i = 0;
 	String errors;
+	String[] numbers;
+	int numbers0Count = 0;
+	int numbers10Count = 0;
+	int numbers20Count = 0;
+	int numbers30Count = 0;
+	int numbers40Count = 0;
+	int numbers50Count = 0;
+	int numbers60Count = 0;
+	int numbers70Count = 0;
+	int numbers80Count = 0;
+	int numbers90Count = 0;
+	
+	String numbers0Bar = "";
+	String numbers10Bar = "";
+	String numbers20Bar = "";
+	String numbers30Bar = "";
+	String numbers40Bar = "";
+	String numbers50Bar = "";
+	String numbers60Bar = "";
+	String numbers70Bar = "";
+	String numbers80Bar = "";
+	String numbers90Bar = "";
+	
+	int count = 0;
 	
 	float lower = 0;
 	float upper = 100;
@@ -279,17 +303,6 @@ public class MainFrame extends JFrame
 		this.distributionLabel.setFont(new Font("Tahoma", 0, 18)); // NOI18N
 		this.distributionLabel.setText("Distribution");
 
-		this.percentage90Label.setText("90%-100%:");
-		this.percentage80Label.setText("80%-89%:");
-		this.percentage70Label.setText("70%-79%:");
-		this.percentage60Label.setText("60%-69%:");
-		this.percentage50Label.setText("50%-59%:");
-		this.percentage40Label.setText("40%-49%:");
-		this.percentage30Label.setText("30%-39%:");
-		this.percentage20Label.setText("20%-29%:");
-		this.percentage10Label.setText("10%-19%:");
-		this.percentage0Label.setText("0%-9%:");
-
 		GroupLayout distributionPanelLayout = new GroupLayout(this.distributionPanel);
 		this.distributionPanel.setLayout(distributionPanelLayout);
 		distributionPanelLayout
@@ -339,8 +352,7 @@ public class MainFrame extends JFrame
 		this.graphTextArea.setColumns(20);
 		this.graphTextArea.setFont(new Font("Monospaced", 0, 11)); // NOI18N
 		this.graphTextArea.setRows(5);
-		this.graphTextArea.setText(
-				"\t|\n90%-100%|\n\t|\n 80%-89%|\n\t|\n 70%-79%|\n\t|\n 60%-69%|\n\t|\n 50%-59%|\n\t|\n 40%-49%|\n\t|\n 30%-39%|\n\t|\n 20%-29%|\n\t|\n 10%-19%|\n\t|\n   0%-9%|\n\t|___|___|___|___|___|___|___|___|___|___|___|___|\n       \t0  10  20  30  40  50  60  70  80  90  100 110  MAX");
+		
 		this.graphTextArea.setEnabled(false);
 
 		GroupLayout graphPanelLayout = new GroupLayout(this.graphPanel);
@@ -506,6 +518,29 @@ public class MainFrame extends JFrame
 	 */
 	private void createGraphMenuItemActionPerformed(ActionEvent evt)
 	{
+		this.graphTextArea.setText(
+				"\t|\n"
+				+ "90%-100%|" + calculateGraphBars(numbers90Bar, numbers90Count) + "|\n"
+				+ "\t|\n"
+				+ " 80%-89%|" + calculateGraphBars(numbers80Bar, numbers80Count) + "|\n"
+				+ "\t|\n"
+				+ " 70%-79%|" + calculateGraphBars(numbers70Bar, numbers70Count) + "|\n"
+				+ "\t|\n"
+				+ " 60%-69%|" + calculateGraphBars(numbers60Bar, numbers60Count) + "|\n"
+				+ "\t|\n"
+				+ " 50%-59%|" + calculateGraphBars(numbers50Bar, numbers50Count) + "|\n"
+				+ "\t|\n"
+				+ " 40%-49%|" + calculateGraphBars(numbers40Bar, numbers40Count) + "|\n"
+				+ "\t|\n"
+				+ " 30%-39%|" + calculateGraphBars(numbers30Bar, numbers30Count) + "|\n"
+				+ "\t|\n"
+				+ " 20%-29%|" + calculateGraphBars(numbers20Bar, numbers20Count) + "|\n"
+				+ "\t|\n"
+				+ " 10%-19%|" + calculateGraphBars(numbers10Bar, numbers10Count) + "|\n"
+				+ "\t|\n"
+				+ "   0%-9%|" + calculateGraphBars(numbers0Bar, numbers0Count) + "|\n"
+				+ "\t|___|___|___|___|___|___|___|___|___|___|___|___|\n"
+				+ "       \t0  10  20  30  40  50  60  70  80  90  100 110  MAX");
 		this.graphTextArea.setVisible(!this.graphTextArea.isVisible());
 	}
 
@@ -650,6 +685,18 @@ public class MainFrame extends JFrame
 	 */
 	private void runAnalyticsMenuItemActionPerformed(ActionEvent evt)
 	{
+
+		this.percentage90Label.setText("90%-100%:" + numbers90Count);
+		this.percentage80Label.setText("80%-89%:" + numbers80Count);
+		this.percentage70Label.setText("70%-79%:" + numbers70Count);
+		this.percentage60Label.setText("60%-69%:" + numbers60Count);
+		this.percentage50Label.setText("50%-59%:" + numbers50Count);
+		this.percentage40Label.setText("40%-49%:" + numbers40Count);
+		this.percentage30Label.setText("30%-39%:" + numbers30Count);
+		this.percentage20Label.setText("20%-29%:" + numbers20Count);
+		this.percentage10Label.setText("10%-19%:" + numbers10Count);
+		this.percentage0Label.setText("0%-9%:" + numbers0Count);
+		
 		this.analyticsPanel.setVisible(!this.analyticsPanel.isVisible());
 		this.distributionPanel.setVisible(!this.distributionPanel.isVisible());
 	}
@@ -811,6 +858,8 @@ public class MainFrame extends JFrame
 		{
 			errors = errors + "\n" + value + " is not in range " + lower + "-" + upper;
 		}
+		
+		calculatePartitions(value);
 	}
 	
 	private void clearData()
@@ -830,7 +879,7 @@ public class MainFrame extends JFrame
 			BufferedReader in = new BufferedReader(new FileReader(file));
 			String line = in.readLine();
 			while (line != null) {
-				String[] numbers = line.split(",");
+				numbers = line.split(",");
 				for (String num : numbers)
 				{
 					addValue(Float.parseFloat(num));
@@ -861,5 +910,60 @@ public class MainFrame extends JFrame
 	private boolean checkBounds(float value)
 	{
 		return lower <= value && upper >= value;
+	}
+	
+	private void calculatePartitions(float value)
+	{
+		if(value >= 0 && value < 10)
+		{
+			numbers0Count++;
+		}
+		else if(value >= 10 && value < 20)
+		{
+			numbers10Count++;
+		}
+		else if(value >= 20 && value < 30)
+		{
+			numbers20Count++;
+		}
+		else if(value >= 30 && value < 40)
+		{
+			numbers30Count++;
+		}
+		else if(value >= 40 && value < 50)
+		{
+			numbers40Count++;
+		}
+		else if(value >= 50 && value < 60)
+		{
+			numbers50Count++;
+		}
+		else if(value >= 60 && value < 70)
+		{
+			numbers60Count++;
+		}
+		else if(value >= 70 && value < 80)
+		{
+			numbers70Count++;
+		}
+		else if(value >= 80 && value < 90)
+		{
+			numbers80Count++;
+		}
+		else if(value >= 90 && value <= 100)
+		{
+			numbers90Count++;
+		}
+	}
+	
+	private String calculateGraphBars(String bar, int amount)
+	{
+		int hyphens = ((amount * 4) / 10) - 1;
+		for(int index = 0; index < hyphens; index++)
+		{
+			bar = bar + "-";
+		}
+		
+		return bar;
 	}
 }

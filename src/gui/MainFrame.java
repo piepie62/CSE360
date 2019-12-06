@@ -619,6 +619,12 @@ public class MainFrame extends JFrame {
 		if (saveFile == null) {
 			// Error handling
 		} else {
+			try (Writer summary = new BufferedWriter(new FileWriter(saveFile.getCanonicalPath()))) {
+				summary.write(allActionsPerformed);
+				summary.close();
+			} catch (IOException ex) {
+
+			}
 			System.out.println(saveFile.getName());
 		}
 	}
@@ -882,13 +888,15 @@ public class MainFrame extends JFrame {
 		int returnVal = fileChooser.showSaveDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
-			try (Writer summary = new BufferedWriter(new FileWriter(file.getName()))) {
-				summary.write(allActionsPerformed);
-				summary.close();
-			} catch (IOException ex) {
-
-			}
 			System.out.println(file.getName());
+			if (!file.getName().endsWith(".txt")) {
+				try {
+					file = new File(file.getCanonicalPath() + ".txt");
+				} catch (IOException e) {
+					errors += e.getMessage();
+					return null;
+				}
+			}
 			return file;
 		} else {
 			System.out.println("File Open Canceled by User");

@@ -36,8 +36,7 @@ import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
-public class MainFrame extends JFrame
-{
+public class MainFrame extends JFrame {
 	private static final long serialVersionUID = -6323073875493450450L;
 
 	private JMenuBar menuBar;
@@ -96,7 +95,7 @@ public class MainFrame extends JFrame
 	private List<Float> dataList = new ArrayList<Float>();
 	String errors = "";
 	String[] numbers;
-	
+
 	int numbers0Count = 0;
 	int numbers10Count = 0;
 	int numbers20Count = 0;
@@ -107,7 +106,7 @@ public class MainFrame extends JFrame
 	int numbers70Count = 0;
 	int numbers80Count = 0;
 	int numbers90Count = 0;
-	
+
 	float numbers0Total = 0;
 	float numbers10Total = 0;
 	float numbers20Total = 0;
@@ -118,7 +117,7 @@ public class MainFrame extends JFrame
 	float numbers70Total = 0;
 	float numbers80Total = 0;
 	float numbers90Total = 0;
-	
+
 	String numbers0Bar = "";
 	String numbers10Bar = "";
 	String numbers20Bar = "";
@@ -129,22 +128,21 @@ public class MainFrame extends JFrame
 	String numbers70Bar = "";
 	String numbers80Bar = "";
 	String numbers90Bar = "";
-	
+
 	String allActionsPerformed = "";
-	
+
 	boolean firstData = true;
 	boolean addedValue = false;
 	float lower = 0;
 	float upper = 100;
 	float maxGrade = -1000000000;
 	float minGrade = 1000000000;
-	
+
 	/**
 	 * Constructor to create a MainFrame. Upon instantiation, the frame then needs
 	 * to be set as visible to be shown to the user.
 	 */
-	public MainFrame()
-	{
+	public MainFrame() {
 		this.initComponents();
 	}
 
@@ -154,8 +152,7 @@ public class MainFrame extends JFrame
 	 * position. This is a long and complex method that should be ignored unless
 	 * major changes to the GUI are needed.
 	 */
-	private void initComponents()
-	{
+	private void initComponents() {
 		this.dataTableScrollPane = new JScrollPane();
 		this.dataTable = new JTable();
 		this.loadFileButton = new JButton();
@@ -207,22 +204,19 @@ public class MainFrame extends JFrame
 		this.setResizable(false);
 		this.setSize(new Dimension(840, 650));
 
-		this.dataTable.setModel(new DefaultTableModel(new Object[][]{}, new String[]{"A", "B", "C", "D"})
-		{
+		this.dataTable.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "A", "B", "C", "D" }) {
 
 			private static final long serialVersionUID = 1L;
-			boolean[] canEdit = new boolean[]{false, false, false, false};
-			Class<?>[] types = new Class[]{Float.class, Float.class, Float.class, Float.class};
+			boolean[] canEdit = new boolean[] { false, false, false, false };
+			Class<?>[] types = new Class[] { Float.class, Float.class, Float.class, Float.class };
 
 			@Override
-			public Class<?> getColumnClass(int columnIndex)
-			{
+			public Class<?> getColumnClass(int columnIndex) {
 				return this.types[columnIndex];
 			}
 
 			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex)
-			{
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
 				return this.canEdit[columnIndex];
 			}
 		});
@@ -236,8 +230,7 @@ public class MainFrame extends JFrame
 		this.dataTableScrollPane.setViewportView(this.dataTable);
 		this.dataTable.getColumnModel().getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		if(this.dataTable.getColumnModel().getColumnCount() > 0)
-		{
+		if (this.dataTable.getColumnModel().getColumnCount() > 0) {
 			this.dataTable.getColumnModel().getColumn(0).setResizable(false);
 			this.dataTable.getColumnModel().getColumn(1).setResizable(false);
 			this.dataTable.getColumnModel().getColumn(2).setResizable(false);
@@ -248,41 +241,33 @@ public class MainFrame extends JFrame
 		this.loadFileButton.setMaximumSize(new Dimension(77, 50));
 		this.loadFileButton.setMinimumSize(new Dimension(77, 50));
 		this.loadFileButton.setPreferredSize(new Dimension(77, 50));
-		this.loadFileButton.addActionListener(new ActionListener()
-		{
+		this.loadFileButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent evt)
-			{
+			public void actionPerformed(ActionEvent evt) {
 				MainFrame.this.loadFileButtonActionPerformed(evt);
 			}
 		});
 
 		this.appendFileButton.setText("Append File");
-		this.appendFileButton.addActionListener(new ActionListener()
-		{
+		this.appendFileButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent evt)
-			{
+			public void actionPerformed(ActionEvent evt) {
 				MainFrame.this.appendFileButtonActionPerformed(evt);
 			}
 		});
 
 		this.insertDataButton.setText("Insert Data");
-		this.insertDataButton.addActionListener(new ActionListener()
-		{
+		this.insertDataButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent evt)
-			{
+			public void actionPerformed(ActionEvent evt) {
 				MainFrame.this.insertDataButtonActionPerformed(evt);
 			}
 		});
 
 		this.deleteDataButton.setText("Delete Data");
-		this.deleteDataButton.addActionListener(new ActionListener()
-		{
+		this.deleteDataButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent evt)
-			{
+			public void actionPerformed(ActionEvent evt) {
 				MainFrame.this.deleteDataButtonActionPerformed(evt);
 			}
 		});
@@ -310,14 +295,24 @@ public class MainFrame extends JFrame
 		this.analyticsPanel.setLayout(analyticsPanelLayout);
 		analyticsPanelLayout.setHorizontalGroup(analyticsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(analyticsPanelLayout.createSequentialGroup()
-						.addGroup(analyticsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(analyticsPanelLayout.createSequentialGroup().addGap(40, 40, 40).addComponent(this.analyticsLabel))
-								.addComponent(this.maxGradeLabel).addComponent(this.minGradeLabel).addComponent(this.meanLabel).addComponent(this.medianLabel).addComponent(this.modeLabel).addComponent(this.numEntriesLabel))
+						.addGroup(analyticsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+								.addGroup(analyticsPanelLayout.createSequentialGroup().addGap(40, 40, 40)
+										.addComponent(this.analyticsLabel))
+								.addComponent(this.maxGradeLabel).addComponent(this.minGradeLabel)
+								.addComponent(this.meanLabel).addComponent(this.medianLabel)
+								.addComponent(this.modeLabel).addComponent(this.numEntriesLabel))
 						.addContainerGap(37, Short.MAX_VALUE)));
 		analyticsPanelLayout.setVerticalGroup(analyticsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(analyticsPanelLayout.createSequentialGroup().addComponent(this.analyticsLabel).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(this.numEntriesLabel)
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(this.maxGradeLabel).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(this.minGradeLabel)
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(this.meanLabel, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(this.medianLabel).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(this.modeLabel).addContainerGap()));
+				.addGroup(analyticsPanelLayout.createSequentialGroup().addComponent(this.analyticsLabel)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
+								Short.MAX_VALUE)
+						.addComponent(this.numEntriesLabel).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(this.maxGradeLabel).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(this.minGradeLabel).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(this.meanLabel, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(this.medianLabel)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(this.modeLabel)
+						.addContainerGap()));
 
 		this.analyticsPanel.setVisible(false);
 
@@ -329,22 +324,46 @@ public class MainFrame extends JFrame
 		distributionPanelLayout
 				.setHorizontalGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 						.addGroup(GroupLayout.Alignment.TRAILING,
-								distributionPanelLayout.createSequentialGroup().addContainerGap(72, Short.MAX_VALUE).addComponent(this.distributionLabel).addGap(67, 67, 67))
-						.addGroup(
-								distributionPanelLayout.createSequentialGroup().addContainerGap()
-										.addGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(this.percentage90Label).addComponent(this.percentage80Label).addComponent(this.percentage70Label)
-												.addComponent(this.percentage60Label).addComponent(this.percentage50Label))
-										.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-												.addComponent(this.percentage30Label).addComponent(this.percentage40Label).addComponent(this.percentage20Label).addComponent(this.percentage10Label)).addComponent(this.percentage0Label))
-										.addGap(35, 35, 35)));
-		distributionPanelLayout.setVerticalGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(distributionPanelLayout.createSequentialGroup().addComponent(this.distributionLabel).addGap(18, 18, 18)
-				.addGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(this.percentage90Label).addComponent(this.percentage40Label)).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-				.addGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(this.percentage80Label).addComponent(this.percentage30Label)).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-				.addGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(this.percentage70Label).addComponent(this.percentage20Label)).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-				.addGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(this.percentage60Label, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE).addComponent(this.percentage10Label))
-				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(this.percentage50Label).addComponent(this.percentage0Label))
-				.addGap(0, 0, Short.MAX_VALUE)));
+								distributionPanelLayout.createSequentialGroup().addContainerGap(72, Short.MAX_VALUE)
+										.addComponent(this.distributionLabel).addGap(67, 67, 67))
+						.addGroup(distributionPanelLayout.createSequentialGroup().addContainerGap()
+								.addGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+										.addComponent(this.percentage90Label).addComponent(this.percentage80Label)
+										.addComponent(this.percentage70Label).addComponent(this.percentage60Label)
+										.addComponent(this.percentage50Label))
+								.addPreferredGap(
+										LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)
+								.addGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+										.addGroup(distributionPanelLayout
+												.createParallelGroup(GroupLayout.Alignment.TRAILING)
+												.addComponent(this.percentage30Label)
+												.addComponent(this.percentage40Label)
+												.addComponent(this.percentage20Label)
+												.addComponent(this.percentage10Label))
+										.addComponent(this.percentage0Label))
+								.addGap(35, 35, 35)));
+		distributionPanelLayout
+				.setVerticalGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+						.addGroup(distributionPanelLayout.createSequentialGroup().addComponent(this.distributionLabel)
+								.addGap(18, 18, 18)
+								.addGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+										.addComponent(this.percentage90Label).addComponent(this.percentage40Label))
+								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+								.addGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+										.addComponent(this.percentage80Label).addComponent(this.percentage30Label))
+								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+								.addGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+										.addComponent(this.percentage70Label).addComponent(this.percentage20Label))
+								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+								.addGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+										.addComponent(this.percentage60Label, GroupLayout.PREFERRED_SIZE, 14,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(this.percentage10Label))
+								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+								.addGroup(distributionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+										.addComponent(this.percentage50Label).addComponent(this.percentage0Label))
+								.addGap(0, 0, Short.MAX_VALUE)));
 
 		this.distributionPanel.setVisible(false);
 
@@ -354,67 +373,82 @@ public class MainFrame extends JFrame
 
 		GroupLayout analyticsPanelSizePanelLayout = new GroupLayout(this.analyticsPanelSizePanel);
 		this.analyticsPanelSizePanel.setLayout(analyticsPanelSizePanelLayout);
-		analyticsPanelSizePanelLayout.setHorizontalGroup(analyticsPanelSizePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 10, Short.MAX_VALUE));
-		analyticsPanelSizePanelLayout.setVerticalGroup(analyticsPanelSizePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 164, Short.MAX_VALUE));
+		analyticsPanelSizePanelLayout.setHorizontalGroup(analyticsPanelSizePanelLayout
+				.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 10, Short.MAX_VALUE));
+		analyticsPanelSizePanelLayout.setVerticalGroup(analyticsPanelSizePanelLayout
+				.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(0, 164, Short.MAX_VALUE));
 
 		GroupLayout topAnalyticsPanelLayout = new GroupLayout(this.topAnalyticsPanel);
 		this.topAnalyticsPanel.setLayout(topAnalyticsPanelLayout);
-		topAnalyticsPanelLayout.setHorizontalGroup(topAnalyticsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(topAnalyticsPanelLayout.createSequentialGroup().addComponent(this.analyticsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addGap(28, 28, 28)
-						.addComponent(this.distributionPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(this.analyticsPanelSizePanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
-		topAnalyticsPanelLayout.setVerticalGroup(topAnalyticsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+		topAnalyticsPanelLayout
+				.setHorizontalGroup(
+						topAnalyticsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+								.addGroup(
+										topAnalyticsPanelLayout.createSequentialGroup()
+												.addComponent(this.analyticsPanel, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGap(28, 28, 28)
+												.addComponent(this.distributionPanel, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+												.addComponent(this.analyticsPanelSizePanel, GroupLayout.DEFAULT_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+		topAnalyticsPanelLayout.setVerticalGroup(topAnalyticsPanelLayout
+				.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(topAnalyticsPanelLayout.createSequentialGroup().addContainerGap()
-						.addGroup(topAnalyticsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false).addComponent(this.analyticsPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(this.distributionPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(this.analyticsPanelSizePanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(topAnalyticsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+								.addComponent(this.analyticsPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)
+								.addComponent(this.distributionPanel, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(this.analyticsPanelSizePanel, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addContainerGap()));
 
 		this.graphTextArea.setColumns(20);
 		this.graphTextArea.setFont(new Font("Monospaced", 0, 11)); // NOI18N
 		this.graphTextArea.setRows(5);
-		
+
 		this.graphTextArea.setEnabled(false);
 
 		GroupLayout graphPanelLayout = new GroupLayout(this.graphPanel);
 		this.graphPanel.setLayout(graphPanelLayout);
 		graphPanelLayout.setHorizontalGroup(graphPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(graphPanelLayout.createSequentialGroup().addGap(0, 10, Short.MAX_VALUE).addComponent(this.graphTextArea, GroupLayout.PREFERRED_SIZE, 443, GroupLayout.PREFERRED_SIZE).addGap(0, 11, Short.MAX_VALUE)));
+				.addGroup(graphPanelLayout.createSequentialGroup().addGap(0, 10, Short.MAX_VALUE)
+						.addComponent(this.graphTextArea, GroupLayout.PREFERRED_SIZE, 443, GroupLayout.PREFERRED_SIZE)
+						.addGap(0, 11, Short.MAX_VALUE)));
 		graphPanelLayout.setVerticalGroup(graphPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(graphPanelLayout.createSequentialGroup().addGap(0, 31, Short.MAX_VALUE).addComponent(this.graphTextArea, GroupLayout.PREFERRED_SIZE, 365, GroupLayout.PREFERRED_SIZE).addGap(0, 32, Short.MAX_VALUE)));
+				.addGroup(graphPanelLayout.createSequentialGroup().addGap(0, 31, Short.MAX_VALUE)
+						.addComponent(this.graphTextArea, GroupLayout.PREFERRED_SIZE, 365, GroupLayout.PREFERRED_SIZE)
+						.addGap(0, 32, Short.MAX_VALUE)));
 
 		this.graphTextArea.setVisible(false);
 
 		this.dataMenu.setText("Data");
 
 		this.loadDataMenuItem.setText("Load Data from File");
-		this.loadDataMenuItem.addActionListener(new ActionListener()
-		{
+		this.loadDataMenuItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent evt)
-			{
+			public void actionPerformed(ActionEvent evt) {
 				MainFrame.this.loadDataMenuItemActionPerformed(evt);
 			}
 		});
 		this.dataMenu.add(this.loadDataMenuItem);
 
 		this.appendDataMenuItem.setText("Append Data from File");
-		this.appendDataMenuItem.addActionListener(new ActionListener()
-		{
+		this.appendDataMenuItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent evt)
-			{
+			public void actionPerformed(ActionEvent evt) {
 				MainFrame.this.appendDataMenuItemActionPerformed(evt);
 			}
 		});
 		this.dataMenu.add(this.appendDataMenuItem);
 
 		this.setBoundariesMenuItem.setText("Set Boundaries");
-		this.setBoundariesMenuItem.addActionListener(new ActionListener()
-		{
+		this.setBoundariesMenuItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent evt)
-			{
+			public void actionPerformed(ActionEvent evt) {
 				MainFrame.this.setBoundariesMenuItemActionPerformed(evt);
 			}
 		});
@@ -425,33 +459,27 @@ public class MainFrame extends JFrame
 		this.analyticsMenu.setText("Analytics");
 
 		this.runAnalyticsMenuItem.setText("Run Analytics");
-		this.runAnalyticsMenuItem.addActionListener(new ActionListener()
-		{
+		this.runAnalyticsMenuItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent evt)
-			{
+			public void actionPerformed(ActionEvent evt) {
 				MainFrame.this.runAnalyticsMenuItemActionPerformed(evt);
 			}
 		});
 		this.analyticsMenu.add(this.runAnalyticsMenuItem);
 
 		this.createGraphMenuItem.setText("Create Graph");
-		this.createGraphMenuItem.addActionListener(new ActionListener()
-		{
+		this.createGraphMenuItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent evt)
-			{
+			public void actionPerformed(ActionEvent evt) {
 				MainFrame.this.createGraphMenuItemActionPerformed(evt);
 			}
 		});
 		this.analyticsMenu.add(this.createGraphMenuItem);
 
 		this.createReportMenuItem.setText("Create Report");
-		this.createReportMenuItem.addActionListener(new ActionListener()
-		{
+		this.createReportMenuItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent evt)
-			{
+			public void actionPerformed(ActionEvent evt) {
 				MainFrame.this.createReportMenuItemActionPerformed(evt);
 			}
 		});
@@ -462,11 +490,9 @@ public class MainFrame extends JFrame
 		this.helpMenu.setText("Help");
 
 		this.displayErrorsMenuItem.setText("Display Errors");
-		this.displayErrorsMenuItem.addActionListener(new ActionListener()
-		{
+		this.displayErrorsMenuItem.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent evt)
-			{
+			public void actionPerformed(ActionEvent evt) {
 				MainFrame.this.displayErrorsMenuItemActionPerformed(evt);
 			}
 		});
@@ -478,26 +504,53 @@ public class MainFrame extends JFrame
 
 		GroupLayout layout = new GroupLayout(this.getContentPane());
 		this.getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(GroupLayout.Alignment.TRAILING,
-				layout.createSequentialGroup()
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false).addComponent(this.appendFileButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(this.deleteDataButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(this.insertDataButton, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
-								.addComponent(this.loadFileButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-						.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED).addComponent(this.dataTableScrollPane, GroupLayout.PREFERRED_SIZE, 260, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(this.graphPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addGroup(layout.createSequentialGroup().addGroup(
-										layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(this.graphSeparator).addComponent(this.topAnalyticsPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+								.addComponent(this.appendFileButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)
+								.addComponent(this.deleteDataButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)
+								.addComponent(this.insertDataButton, GroupLayout.PREFERRED_SIZE, 100,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(this.loadFileButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE))
+						.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+						.addComponent(
+								this.dataTableScrollPane, GroupLayout.PREFERRED_SIZE, 260, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+								.addComponent(this.graphPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)
+								.addGroup(layout.createSequentialGroup()
+										.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+												.addComponent(this.graphSeparator).addComponent(this.topAnalyticsPanel,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+														Short.MAX_VALUE))
 										.addContainerGap()))));
 		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addComponent(this.topAnalyticsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(this.graphSeparator, GroupLayout.PREFERRED_SIZE, 2, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(this.graphPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(this.topAnalyticsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(this.graphSeparator, GroupLayout.PREFERRED_SIZE, 2, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(this.graphPanel,
+								GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 				.addGroup(layout.createSequentialGroup()
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup().addComponent(this.loadFileButton, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(this.appendFileButton, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(this.insertDataButton, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(this.deleteDataButton, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE).addGap(0, 399, Short.MAX_VALUE))
+								.addGroup(layout.createSequentialGroup()
+										.addComponent(this.loadFileButton, GroupLayout.PREFERRED_SIZE, 50,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+										.addComponent(this.appendFileButton, GroupLayout.PREFERRED_SIZE, 50,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+										.addComponent(this.insertDataButton, GroupLayout.PREFERRED_SIZE, 50,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+										.addComponent(this.deleteDataButton, GroupLayout.PREFERRED_SIZE, 50,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(0, 399, Short.MAX_VALUE))
 								.addComponent(this.dataTableScrollPane))
 						.addContainerGap()));
 
@@ -508,17 +561,15 @@ public class MainFrame extends JFrame
 	 * Action for when the "Append Data" menu item is selected. Prompts the user to
 	 * type a number that will then be inserted into the dataset.
 	 *
-	 * @param evt
-	 *            the event that caused this action(Ignore)
+	 * @param evt the event that caused this action(Ignore)
 	 */
-	private void appendDataMenuItemActionPerformed(ActionEvent evt)
-	{
+	private void appendDataMenuItemActionPerformed(ActionEvent evt) {
 		File file = this.showFileOpenDialog();
-		if(file != null)
+		if (file != null)
 			parseFile(file);
-		
+
 		this.updateTable();
-		
+
 		setAnalytics();
 		setGraph();
 	}
@@ -527,17 +578,15 @@ public class MainFrame extends JFrame
 	 * Action for when the "Append File" button is selected. Prompts the user to
 	 * select a file that will then be inserted into the dataset.
 	 *
-	 * @param evt
-	 *            the event that caused this action(Ignore)
+	 * @param evt the event that caused this action(Ignore)
 	 */
-	private void appendFileButtonActionPerformed(ActionEvent evt)
-	{
+	private void appendFileButtonActionPerformed(ActionEvent evt) {
 		File file = this.showFileOpenDialog();
-		if(file != null)
+		if (file != null)
 			parseFile(file);
-		
+
 		this.updateTable();
-		
+
 		setAnalytics();
 		setGraph();
 	}
@@ -546,11 +595,9 @@ public class MainFrame extends JFrame
 	 * Action for when the "Create Graph" menu item is selected. Will display and
 	 * populate the graph based on the data supplied.
 	 *
-	 * @param evt
-	 *            the event that caused this action(Ignore)
+	 * @param evt the event that caused this action(Ignore)
 	 */
-	private void createGraphMenuItemActionPerformed(ActionEvent evt)
-	{
+	private void createGraphMenuItemActionPerformed(ActionEvent evt) {
 		setGraph();
 		this.graphTextArea.setVisible(!this.graphTextArea.isVisible());
 	}
@@ -560,23 +607,18 @@ public class MainFrame extends JFrame
 	 * report based on all of the actions that have been performed then prompt the
 	 * user to save it as a .txt file.
 	 *
-	 * @param evt
-	 *            the event that caused this action(Ignore)
+	 * @param evt the event that caused this action(Ignore)
 	 */
-	private void createReportMenuItemActionPerformed(ActionEvent evt)
-	{
+	private void createReportMenuItemActionPerformed(ActionEvent evt) {
 		// Generate report
 
 		// Note: file here may or may not have the correct extension
 		// Will have to add the .txt
 		File saveFile = showSaveReportDialog();
 
-		if(saveFile == null)
-		{
+		if (saveFile == null) {
 			// Error handling
-		}
-		else
-		{
+		} else {
 			System.out.println(saveFile.getName());
 		}
 	}
@@ -586,13 +628,11 @@ public class MainFrame extends JFrame
 	 * to enter a number to remove and remove it from the data set. TODO: Make
 	 * dialog box to prompt the user for a number to delete.
 	 *
-	 * @param evt
-	 *            the event that caused this action(Ignore)
+	 * @param evt the event that caused this action(Ignore)
 	 */
-	private void deleteDataButtonActionPerformed(ActionEvent evt)
-	{
+	private void deleteDataButtonActionPerformed(ActionEvent evt) {
 		ValuePromptForm valueForm = new ValuePromptForm(this, true, "Enter a value to delete");
-		
+
 		Point dialogPosition = new Point();
 		dialogPosition.setLocation(this.getLocation());
 		dialogPosition.translate(this.getWidth() / 2, this.getHeight() / 2);
@@ -601,22 +641,18 @@ public class MainFrame extends JFrame
 		valueForm.setVisible(true);
 
 		// Wait for the form to be closed
-		while(valueForm.isDisplayable())
-		{
-			
+		while (valueForm.isDisplayable()) {
+
 		}
 
 		// Error handling: make sure the value entered is in the dataset
 		float number = valueForm.getValue();
-		
-		if(!dataList.contains(number))
-		{
+
+		if (!dataList.contains(number)) {
 			allActionsPerformed += "Could not remove value. Table does not contain " + valueForm.getValue() + ".\n";
-		}
-		else
-		{
+		} else {
 			dataList.remove(number);
-			
+
 			numbers0Count = 0;
 			numbers10Count = 0;
 			numbers20Count = 0;
@@ -627,7 +663,7 @@ public class MainFrame extends JFrame
 			numbers70Count = 0;
 			numbers80Count = 0;
 			numbers90Count = 0;
-			
+
 			numbers0Total = 0;
 			numbers10Total = 0;
 			numbers20Total = 0;
@@ -638,7 +674,7 @@ public class MainFrame extends JFrame
 			numbers70Total = 0;
 			numbers80Total = 0;
 			numbers90Total = 0;
-			
+
 			numbers0Bar = "";
 			numbers10Bar = "";
 			numbers20Bar = "";
@@ -649,16 +685,16 @@ public class MainFrame extends JFrame
 			numbers70Bar = "";
 			numbers80Bar = "";
 			numbers90Bar = "";
-			
-			for(float f : dataList)
+
+			for (float f : dataList)
 				this.calculatePartitions(f);
-			
+
 			allActionsPerformed += "Value deleted: " + valueForm.getValue() + "\n";
 		}
-		
+
 		setAnalytics();
 		setGraph();
-		
+
 		this.updateTable();
 	}
 
@@ -667,13 +703,11 @@ public class MainFrame extends JFrame
 	 * dialog that will list all of the errors that have occurred in the current
 	 * session. TODO: Make dialog box to show the errors.
 	 *
-	 * @param evt
-	 *            the event that caused this action(Ignore)
+	 * @param evt the event that caused this action(Ignore)
 	 */
-	private void displayErrorsMenuItemActionPerformed(ActionEvent evt)
-	{
+	private void displayErrorsMenuItemActionPerformed(ActionEvent evt) {
 		ErrorForm errorDisplay = new ErrorForm(this, true);
-		
+
 		Point dialogPosition = new Point();
 		dialogPosition.setLocation(this.getLocation());
 		dialogPosition.translate(this.getWidth() / 2, this.getHeight() / 2);
@@ -684,20 +718,17 @@ public class MainFrame extends JFrame
 
 	/**
 	 * Action for when the "Insert Data" button is selected. Prompts the user to
-	 * type a number that will then be added to the data set. If this is the
-	 * first data being input, prompts the user to set the bounds of the data set.
+	 * type a number that will then be added to the data set. If this is the first
+	 * data being input, prompts the user to set the bounds of the data set.
 	 *
-	 * @param evt
-	 *            the event that caused this action(Ignore)
+	 * @param evt the event that caused this action(Ignore)
 	 */
-	private void insertDataButtonActionPerformed(ActionEvent evt)
-	{
-		if(firstData)
-		{
+	private void insertDataButtonActionPerformed(ActionEvent evt) {
+		if (firstData) {
 			setBounds();
 		}
 		ValuePromptForm valueForm = new ValuePromptForm(this, true, "Enter a value to insert");
-		
+
 		Point dialogPosition = new Point();
 		dialogPosition.setLocation(this.getLocation());
 		dialogPosition.translate(this.getWidth() / 2, this.getHeight() / 2);
@@ -706,17 +737,16 @@ public class MainFrame extends JFrame
 		valueForm.setVisible(true);
 
 		// Wait for the form to be closed
-		while(valueForm.isDisplayable())
-		{
-			
+		while (valueForm.isDisplayable()) {
+
 		}
-		
+
 		addValue(valueForm.getValue());
 		setAnalytics();
 		setGraph();
-		
+
 		this.updateTable();
-		
+
 		allActionsPerformed += "Value inserted: " + valueForm.getValue() + ".\n";
 	}
 
@@ -725,22 +755,19 @@ public class MainFrame extends JFrame
 	 * open a supported file and then insert its contents into a new dataset. This
 	 * will also prompt the user to set the bounds on the current dataset.
 	 * 
-	 * @param evt
-	 *            the event that caused this action(Ignore)
+	 * @param evt the event that caused this action(Ignore)
 	 */
-	private void loadDataMenuItemActionPerformed(ActionEvent evt)
-	{
+	private void loadDataMenuItemActionPerformed(ActionEvent evt) {
 		setBounds();
 		File file = this.showFileOpenDialog();
-		if(file != null)
-		{
+		if (file != null) {
 			clearData();
 			firstData = true;
 			parseFile(file);
 		}
-		
+
 		this.updateTable();
-		
+
 		setAnalytics();
 		setGraph();
 	}
@@ -750,22 +777,19 @@ public class MainFrame extends JFrame
 	 * a supported file and then insert its contents into a new dataset. This will
 	 * also prompt the user to set the bounds on the current dataset.
 	 * 
-	 * @param evt
-	 *            the event that caused this action(Ignore)
+	 * @param evt the event that caused this action(Ignore)
 	 */
-	private void loadFileButtonActionPerformed(ActionEvent evt)
-	{
+	private void loadFileButtonActionPerformed(ActionEvent evt) {
 		setBounds();
 		File file = this.showFileOpenDialog();
-		if(file != null)
-		{
+		if (file != null) {
 			clearData();
 			firstData = true;
 			parseFile(file);
 		}
-		
+
 		this.updateTable();
-		
+
 		setAnalytics();
 		setGraph();
 	}
@@ -774,17 +798,16 @@ public class MainFrame extends JFrame
 	 * Action for when the "Run Analytics" menu item is selected. Populates the
 	 * analytics area with the information about the current dataset.
 	 *
-	 * @param evt
-	 *            the event that caused this action(Ignore)
+	 * @param evt the event that caused this action(Ignore)
 	 */
-	private void runAnalyticsMenuItemActionPerformed(ActionEvent evt)
-	{
+	private void runAnalyticsMenuItemActionPerformed(ActionEvent evt) {
 		setAnalytics();
-		// see no point in re-hiding the panel after first showing it if the analytics are run again,
+		// see no point in re-hiding the panel after first showing it if the analytics
+		// are run again,
 		// since the values still update with them always showing
-		if(!this.analyticsPanel.isVisible())
+		if (!this.analyticsPanel.isVisible())
 			this.analyticsPanel.setVisible(true);
-		if(!this.distributionPanel.isVisible())
+		if (!this.distributionPanel.isVisible())
 			this.distributionPanel.setVisible(true);
 	}
 
@@ -792,26 +815,22 @@ public class MainFrame extends JFrame
 	 * The action for the menu item "Set Boundaries" is selected. Will show the
 	 * BoundarySetForm to the user.
 	 *
-	 * @param evt
-	 *            the event that caused this action(Ignore)
+	 * @param evt the event that caused this action(Ignore)
 	 */
-	private void setBoundariesMenuItemActionPerformed(ActionEvent evt)
-	{
+	private void setBoundariesMenuItemActionPerformed(ActionEvent evt) {
 		setBounds();
-		
+
 		ArrayList<Float> toRemoveList = new ArrayList<>();
-		
-		for(float f : dataList)
-		{
-			if(!checkBounds(f))
-			{
+
+		for (float f : dataList) {
+			if (!checkBounds(f)) {
 				errors = errors + "\n" + f + " is not in range " + lower + "-" + upper;
 				toRemoveList.add(f);
 			}
 		}
-		
+
 		dataList.removeAll(toRemoveList);
-		
+
 		this.updateTable();
 	}
 
@@ -822,8 +841,7 @@ public class MainFrame extends JFrame
 	 *
 	 * @return the chosen file
 	 */
-	private File showFileOpenDialog()
-	{
+	private File showFileOpenDialog() {
 		JFileChooser fileChooser = new JFileChooser();
 
 		fileChooser.setDialogTitle("Open file");
@@ -834,14 +852,11 @@ public class MainFrame extends JFrame
 
 		int returnVal = fileChooser.showOpenDialog(this);
 
-		if(returnVal == JFileChooser.APPROVE_OPTION)
-		{
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
-			allActionsPerformed +="Loaded file: " + file.getName() + ".\n";
+			allActionsPerformed += "Loaded file: " + file.getName() + ".\n";
 			return file;
-		}
-		else
-		{
+		} else {
 			System.out.println("File Open Canceled by User");
 		}
 
@@ -850,13 +865,12 @@ public class MainFrame extends JFrame
 
 	/**
 	 * Displays a file chooser dialog box to the user. The dialog prompts the user
-	 * to enter a file to save. The dialog will filter out all other files other than
-	 * *.txt. Returns null if the user cancels the dialog.
+	 * to enter a file to save. The dialog will filter out all other files other
+	 * than *.txt. Returns null if the user cancels the dialog.
 	 *
 	 * @return the chosen file
 	 */
-	private File showSaveReportDialog()
-	{
+	private File showSaveReportDialog() {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setDialogTitle("Save file");
 
@@ -866,84 +880,67 @@ public class MainFrame extends JFrame
 		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
 
 		int returnVal = fileChooser.showSaveDialog(this);
-		if(returnVal == JFileChooser.APPROVE_OPTION)
-		{
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
-			try (Writer summary = new BufferedWriter(new FileWriter(file.getName())))
-			{
+			try (Writer summary = new BufferedWriter(new FileWriter(file.getName()))) {
 				summary.write(allActionsPerformed);
 				summary.close();
-			}
-			catch (IOException ex)
-			{
-				
+			} catch (IOException ex) {
+
 			}
 			System.out.println(file.getName());
 			return file;
-		}
-		else
-		{
+		} else {
 			System.out.println("File Open Canceled by User");
 		}
 
 		return null;
 	}
-	
+
 	/**
 	 * Adds the value to the data table and list.
 	 * 
-	 * @param value	the number to be added
+	 * @param value the number to be added
 	 */
-	private void addValue(float value)
-	{
-		if (checkBounds(value))
-		{
+	private void addValue(float value) {
+		if (checkBounds(value)) {
 			this.dataList.add(value);
-			if(value < this.minGrade)
-			{
+			if (value < this.minGrade) {
 				this.minGrade = value;
 			}
-			if(value > this.maxGrade)
-			{
+			if (value > this.maxGrade) {
 				this.maxGrade = value;
 			}
 			addedValue = true;
 			firstData = false;
-		}
-		else
-		{
+		} else {
 			addedValue = false;
-			if(errors != "")
-			{
+			if (errors != "") {
 				errors += "\n";
 			}
 			errors = errors + value + " is not in range " + lower + " - " + upper;
 		}
-		
+
 		calculatePartitions(value);
 	}
-	
+
 	/**
 	 * Synchronize the table with the main data list. Sorts the list and puts the
-	 * data into the the table in descending columns. Call this method after changing
-	 * the data list.
+	 * data into the the table in descending columns. Call this method after
+	 * changing the data list.
 	 */
-	private void updateTable()
-	{
+	private void updateTable() {
 		DefaultTableModel tableModel = (DefaultTableModel) this.dataTable.getModel();
 
 		// Remove any null values
-		while(dataList.contains(null))
+		while (dataList.contains(null))
 			dataList.remove(null);
 
 		// Sort the data list
-		dataList.sort((Float f1, Float f2)->{
-			if (f1 > f2)
-			{
+		dataList.sort((Float f1, Float f2) -> {
+			if (f1 > f2) {
 				return -1;
-			}
-			else if (f1 < f2)
-			{
+			} else if (f1 < f2) {
 				return 1;
 			}
 			return 0;
@@ -953,54 +950,53 @@ public class MainFrame extends JFrame
 
 		Float[][] dataVector = new Float[rows][4];
 
-		for(int col = 0; col < 4; col++)
-		{
-			for(int row = 0; row < rows; row++)
-			{
+		for (int col = 0; col < 4; col++) {
+			for (int row = 0; row < rows; row++) {
 				// Calculate the array position
 				int loc = row * 4 + col;
-				if (loc < dataList.size())
-				{
+				if (loc < dataList.size()) {
 					dataVector[row][col] = dataList.get(loc);
 				}
 			}
 		}
 
-		tableModel.setDataVector(dataVector, new String[]{"A", "B", "C", "D"});
+		tableModel.setDataVector(dataVector, new String[] { "A", "B", "C", "D" });
 	}
 
 	/**
 	 * Clears the data table and list of all values.
 	 */
-	private void clearData()
-	{
+	private void clearData() {
 		dataList.clear();
 		updateTable();
 		setAnalytics();
 		setGraph();
 	}
-	
+
 	/**
 	 * Opens the file and adds the values to the data table.
 	 * 
-	 * @param file	the requested file to be opened
+	 * @param file the requested file to be opened
 	 */
-	private void parseFile(File file)
-	{
+	private void parseFile(File file) {
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(file));
 			String line = in.readLine();
+			if (line.length() >= 3 && line.charAt(0) == 0xEF && line.charAt(1) == 0xBB && line.charAt(2) == 0xBF) {
+				line = line.substring(3);
+			}
 			int lineNum = 0;
 			while (line != null) {
 				lineNum++;
 				numbers = line.split(",");
-				for (String num : numbers)
-				{
-					addValue(Float.parseFloat(num));
-					if(!addedValue)
-					{
-						errors += "\n\t Value located in " + file.getName()
-								+ " Line " + lineNum;
+				for (String num : numbers) {
+					try {
+						addValue(Float.parseFloat(num));
+					} catch (NumberFormatException e) {
+						errors = errors + "\nInvalid number format in " + file.getName() + ": " + e.getMessage();
+					}
+					if (!addedValue) {
+						errors += "\n\t Value located in " + file.getName() + " Line " + lineNum;
 					}
 				}
 				line = in.readLine();
@@ -1010,16 +1006,13 @@ public class MainFrame extends JFrame
 			errors = errors + "\n" + e.getMessage();
 		} catch (IOException e) {
 			errors = errors + "\n" + e.getMessage();
-		} catch (NumberFormatException e) {
-			errors = errors + "\n" + e.getMessage();
 		}
 	}
-	
+
 	/**
 	 * Sets the upper and lower bounds.
 	 */
-	private void setBounds()
-	{
+	private void setBounds() {
 		BoundarySetForm boundsDialog = new BoundarySetForm(this, true);
 		Point dialogPosition = new Point();
 		dialogPosition.setLocation(this.getLocation());
@@ -1028,153 +1021,122 @@ public class MainFrame extends JFrame
 		boundsDialog.setLocation(dialogPosition);
 		boundsDialog.setVisible(true);
 	}
-	
+
 	/**
 	 * Tests the value against the currently set bounds.
 	 * 
-	 * @param	value	the number that will be tested
-	 * @return	whether it is true or false if the value is within bounds
+	 * @param value the number that will be tested
+	 * @return whether it is true or false if the value is within bounds
 	 */
-	private boolean checkBounds(float value)
-	{
+	private boolean checkBounds(float value) {
 		return lower <= value && upper >= value;
 	}
-	
+
 	/**
 	 * Calculates the amount per percentage distribution.
 	 * 
 	 * @param value the data value that was taken from the source file
 	 */
-	private void calculatePartitions(float value)
-	{
-		if(value >= 0 && value < 10)
-		{
+	private void calculatePartitions(float value) {
+		if (value >= 0 && value < 10) {
 			numbers0Count++;
 			numbers0Total = numbers0Total + value;
-		}
-		else if(value >= 10 && value < 20)
-		{
+		} else if (value >= 10 && value < 20) {
 			numbers10Count++;
 			numbers10Total = numbers10Total + value;
-		}
-		else if(value >= 20 && value < 30)
-		{
+		} else if (value >= 20 && value < 30) {
 			numbers20Count++;
 			numbers20Total = numbers20Total + value;
-		}
-		else if(value >= 30 && value < 40)
-		{
+		} else if (value >= 30 && value < 40) {
 			numbers30Count++;
 			numbers30Total = numbers30Total + value;
-		}
-		else if(value >= 40 && value < 50)
-		{
+		} else if (value >= 40 && value < 50) {
 			numbers40Count++;
 			numbers40Total = numbers40Total + value;
-		}
-		else if(value >= 50 && value < 60)
-		{
+		} else if (value >= 50 && value < 60) {
 			numbers50Count++;
 			numbers50Total = numbers50Total + value;
-		}
-		else if(value >= 60 && value < 70)
-		{
+		} else if (value >= 60 && value < 70) {
 			numbers60Count++;
 			numbers60Total = numbers60Total + value;
-		}
-		else if(value >= 70 && value < 80)
-		{
+		} else if (value >= 70 && value < 80) {
 			numbers70Count++;
 			numbers70Total = numbers70Total + value;
-		}
-		else if(value >= 80 && value < 90)
-		{
+		} else if (value >= 80 && value < 90) {
 			numbers80Count++;
 			numbers80Total = numbers80Total + value;
-		}
-		else if(value >= 90 && value <= 100)
-		{
+		} else if (value >= 90 && value <= 100) {
 			numbers90Count++;
 			numbers90Total = numbers90Total + value;
 		}
 	}
-	
+
 	/**
-	 * Calculates the number of hyphens needed to fill out each bar in the
-	 * graph.
+	 * Calculates the number of hyphens needed to fill out each bar in the graph.
 	 * 
-	 * @param bar	the String of hyphens (empty when called)
-	 * @param amount	the amount of grades between a specific percentage
+	 * @param bar    the String of hyphens (empty when called)
+	 * @param amount the amount of grades between a specific percentage
 	 * @return the String of hyphens
 	 */
-	private String calculateGraphBars(String bar, int amount)
-	{
+	private String calculateGraphBars(String bar, int amount) {
 		int hyphens = ((amount * 4) / 10) - 1;
-		for(int index = 0; index < hyphens; index++)
-		{
+		for (int index = 0; index < hyphens; index++) {
 			bar = bar + "-";
 		}
-		
+
 		return bar;
 	}
-	
+
 	/**
 	 * Finds the mean of the current data set.
 	 *
-	 *@return the mean of the data
+	 * @return the mean of the data
 	 */
-	private float findMean()
-	{
+	private float findMean() {
 		float total = 0;
-		for(int meanLoop = 0; meanLoop < this.dataList.size(); meanLoop++)
-		{
+		for (int meanLoop = 0; meanLoop < this.dataList.size(); meanLoop++) {
 			total += this.dataList.get(meanLoop);
 		}
-		return total / (float)this.dataList.size();
+		return total / (float) this.dataList.size();
 	}
-	
+
 	/**
 	 * Finds the median of the current data set.
 	 * 
 	 * @return the median of the data
 	 */
-	private float findMedian()
-	{
-		if(dataList.isEmpty())
+	private float findMedian() {
+		if (dataList.isEmpty())
 			return 0;
-		
+
 		List<Float> listCopy = new ArrayList<>(dataList);
 		listCopy.sort(null);
 		return listCopy.get(listCopy.size() / 2);
 	}
-	
+
 	/**
 	 * Finds the mode of the current data set.
 	 * 
-	 * @return	the mode of the data
+	 * @return the mode of the data
 	 */
-	private float findMode()
-	{
-		if(dataList.isEmpty())
+	private float findMode() {
+		if (dataList.isEmpty())
 			return 0;
-		
+
 		int currentCount = 1;
 		int maxCount = 0;
 		float mode = this.dataList.get(0);
-		for(int modeLoop = 0; modeLoop < this.dataList.size(); modeLoop++)
-		{
-			for(int inModeLoop = 0; inModeLoop < this.dataList.size(); inModeLoop++)
-			{
-				//System.out.println(this.dataList.get(inModeLoop) + " == " + this.dataList.get(modeLoop) + " ?");
-				if((float)this.dataList.get(inModeLoop) == (float)this.dataList.get(modeLoop))
-				{
-					//System.out.println("yes, adding");
+		for (int modeLoop = 0; modeLoop < this.dataList.size(); modeLoop++) {
+			for (int inModeLoop = 0; inModeLoop < this.dataList.size(); inModeLoop++) {
+				// System.out.println(this.dataList.get(inModeLoop) + " == " +
+				// this.dataList.get(modeLoop) + " ?");
+				if ((float) this.dataList.get(inModeLoop) == (float) this.dataList.get(modeLoop)) {
+					// System.out.println("yes, adding");
 					currentCount++;
 				}
 			}
-			if(currentCount > maxCount)
-			{
-				//System.out.println("found new mode");
+			if (currentCount > maxCount) {
+				// System.out.println("found new mode");
 				maxCount = currentCount;
 				mode = dataList.get(modeLoop);
 			}
@@ -1182,15 +1144,13 @@ public class MainFrame extends JFrame
 		}
 		return mode;
 	}
-	
+
 	/**
 	 * Sets the analytics and distribution values.
 	 */
-	private void setAnalytics()
-	{
+	private void setAnalytics() {
 		this.numEntriesLabel.setText("Number of Entries: " + dataList.size());
-		if(!firstData)
-		{
+		if (!firstData) {
 			this.maxGradeLabel.setText("Max Grade: " + this.maxGrade);
 			this.minGradeLabel.setText("Min Grade: " + this.minGrade);
 		}
@@ -1208,33 +1168,21 @@ public class MainFrame extends JFrame
 		this.percentage10Label.setText("10%-19%: " + (numbers10Total / numbers10Count));
 		this.percentage0Label.setText("0%-9%: " + (numbers0Total / numbers0Count));
 	}
-	
+
 	/**
 	 * Sets the graph strings.
 	 */
-	private void setGraph()
-	{
-		this.graphTextArea.setText(
-				"\t|\n"
-				+ "90%-100%|" + calculateGraphBars(numbers90Bar, numbers90Count) + "|\n"
-				+ "\t|\n"
-				+ " 80%-89%|" + calculateGraphBars(numbers80Bar, numbers80Count) + "|\n"
-				+ "\t|\n"
-				+ " 70%-79%|" + calculateGraphBars(numbers70Bar, numbers70Count) + "|\n"
-				+ "\t|\n"
-				+ " 60%-69%|" + calculateGraphBars(numbers60Bar, numbers60Count) + "|\n"
-				+ "\t|\n"
-				+ " 50%-59%|" + calculateGraphBars(numbers50Bar, numbers50Count) + "|\n"
-				+ "\t|\n"
-				+ " 40%-49%|" + calculateGraphBars(numbers40Bar, numbers40Count) + "|\n"
-				+ "\t|\n"
-				+ " 30%-39%|" + calculateGraphBars(numbers30Bar, numbers30Count) + "|\n"
-				+ "\t|\n"
-				+ " 20%-29%|" + calculateGraphBars(numbers20Bar, numbers20Count) + "|\n"
-				+ "\t|\n"
-				+ " 10%-19%|" + calculateGraphBars(numbers10Bar, numbers10Count) + "|\n"
-				+ "\t|\n"
-				+ "   0%-9%|" + calculateGraphBars(numbers0Bar, numbers0Count) + "|\n"
+	private void setGraph() {
+		this.graphTextArea.setText("\t|\n" + "90%-100%|" + calculateGraphBars(numbers90Bar, numbers90Count) + "|\n"
+				+ "\t|\n" + " 80%-89%|" + calculateGraphBars(numbers80Bar, numbers80Count) + "|\n" + "\t|\n"
+				+ " 70%-79%|" + calculateGraphBars(numbers70Bar, numbers70Count) + "|\n" + "\t|\n" + " 60%-69%|"
+				+ calculateGraphBars(numbers60Bar, numbers60Count) + "|\n" + "\t|\n" + " 50%-59%|"
+				+ calculateGraphBars(numbers50Bar, numbers50Count) + "|\n" + "\t|\n" + " 40%-49%|"
+				+ calculateGraphBars(numbers40Bar, numbers40Count) + "|\n" + "\t|\n" + " 30%-39%|"
+				+ calculateGraphBars(numbers30Bar, numbers30Count) + "|\n" + "\t|\n" + " 20%-29%|"
+				+ calculateGraphBars(numbers20Bar, numbers20Count) + "|\n" + "\t|\n" + " 10%-19%|"
+				+ calculateGraphBars(numbers10Bar, numbers10Count) + "|\n" + "\t|\n" + "   0%-9%|"
+				+ calculateGraphBars(numbers0Bar, numbers0Count) + "|\n"
 				+ "\t|___|___|___|___|___|___|___|___|___|___|___|___|\n"
 				+ "       \t0  10  20  30  40  50  60  70  80  90  100 110  MAX");
 	}

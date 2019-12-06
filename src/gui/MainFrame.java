@@ -622,8 +622,8 @@ public class MainFrame extends JFrame {
 			try (Writer summary = new BufferedWriter(new FileWriter(saveFile.getCanonicalPath()))) {
 				summary.write(allActionsPerformed);
 				summary.close();
-			} catch (IOException ex) {
-
+			} catch (IOException e) {
+				errors += "\n" + e.getMessage();
 			}
 			System.out.println(saveFile.getName());
 		}
@@ -893,7 +893,7 @@ public class MainFrame extends JFrame {
 				try {
 					file = new File(file.getCanonicalPath() + ".txt");
 				} catch (IOException e) {
-					errors += e.getMessage();
+					errors += "\n" + e.getMessage();
 					return null;
 				}
 			}

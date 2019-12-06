@@ -30,7 +30,7 @@ import javax.swing.JTextArea;
 import javax.swing.LayoutStyle;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
-import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 public class MainFrame extends JFrame
@@ -91,7 +91,6 @@ public class MainFrame extends JFrame
 	private JTextArea graphTextArea;
 
 	private List<Float> dataList = new ArrayList<Float>();
-	int i = 0;
 	String errors = "";
 	String[] numbers;
 	
@@ -499,6 +498,8 @@ public class MainFrame extends JFrame
 		File file = this.showFileOpenDialog();
 		if(file != null)
 			parseFile(file);
+		
+		this.updateTable();
 	}
 
 	/**
@@ -513,6 +514,8 @@ public class MainFrame extends JFrame
 		File file = this.showFileOpenDialog();
 		if(file != null)
 			parseFile(file);
+		
+		this.updateTable();
 	}
 
 	/**
@@ -581,19 +584,14 @@ public class MainFrame extends JFrame
 
 		// Error handling: make sure the value entered is in the dataset
 		float number = valueForm.getValue();
-		int listIndex = dataList.indexOf(number);
-		List<Float> listCopy = new ArrayList<>(dataList);
 		
-		if(listIndex == -1)
+		if(!dataList.contains(number))
 		{
 			System.out.println("Table does not contain " + number);
 		}
 		else
 		{
-			listCopy.remove(listIndex);
-			dataList.clear();
-			clearData();
-			i = 0;
+			dataList.remove(number);
 			
 			numbers0Count = 0;
 			numbers10Count = 0;
@@ -617,14 +615,14 @@ public class MainFrame extends JFrame
 			numbers80Bar = "";
 			numbers90Bar = "";
 			
-			for(int tableIndex = 0; tableIndex < listCopy.size(); tableIndex++)
-			{
-				addValue(listCopy.get(tableIndex));
-			}
+			for(float f : dataList)
+				this.calculatePartitions(f);
 		}
 		
 		setAnalytics();
 		setGraph();
+		
+		this.updateTable();
 
 		System.out.println("Value entered: " + valueForm.getValue());
 	}
@@ -682,6 +680,8 @@ public class MainFrame extends JFrame
 		setAnalytics();
 		setGraph();
 		
+		this.updateTable();
+		
 		System.out.println("Value entered: " + valueForm.getValue());
 	}
 
@@ -695,7 +695,16 @@ public class MainFrame extends JFrame
 	 */
 	private void loadDataMenuItemActionPerformed(ActionEvent evt)
 	{
-		this.showFileOpenDialog();
+		setBounds();
+		File file = this.showFileOpenDialog();
+		if(file != null)
+		{
+			clearData();
+			firstData = true;
+			parseFile(file);
+		}
+		
+		this.updateTable();
 	}
 
 	/**
@@ -716,6 +725,8 @@ public class MainFrame extends JFrame
 			firstData = true;
 			parseFile(file);
 		}
+		
+		this.updateTable();
 	}
 
 	/**
@@ -746,6 +757,19 @@ public class MainFrame extends JFrame
 	private void setBoundariesMenuItemActionPerformed(ActionEvent evt)
 	{
 		setBounds();
+		
+		ArrayList<Float> toRemoveList = new ArrayList<>();
+		
+		for(float f : dataList)
+		{
+			if(!checkBounds(f))
+			{
+				errors = errors + "\n" + f + " is not in range " + lower + "-" + upper;
+				toRemoveList.add(f);
+			}
+		}
+		
+		dataList.removeAll(toRemoveList);
 	}
 
 	/**
@@ -763,39 +787,7 @@ public class MainFrame extends JFrame
 		fileChooser.setAcceptAllFileFilterUsed(false);
 
 		// Adds the filter to ignore all other files but .txt and .csv
-		fileChooser.addChoosableFileFilter(new FileFilter()
-		{
-			@Override
-			public boolean accept(File f)
-			{
-				if(f.isDirectory())
-				{
-					return true;
-				}
-
-				String extension = f.getName().substring(f.getName().lastIndexOf(".") + 1, f.getName().length());
-
-				if(extension != null)
-				{
-					if(extension.equals("txt") || extension.equals("csv"))
-					{
-						return true;
-					}
-				}
-				else
-				{
-					return false;
-				}
-
-				return false;
-			}
-
-			@Override
-			public String getDescription()
-			{
-				return "*.txt,*.csv";
-			}
-		});
+		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("*.txt, *.csv", "txt", "csv"));
 
 		int returnVal = fileChooser.showOpenDialog(this);
 
@@ -827,40 +819,8 @@ public class MainFrame extends JFrame
 
 		fileChooser.setAcceptAllFileFilterUsed(false);
 
-		// Adds the filter to ignore all other files but .txt and .csv
-		fileChooser.addChoosableFileFilter(new FileFilter()
-		{
-			@Override
-			public boolean accept(File f)
-			{
-				if(f.isDirectory())
-				{
-					return true;
-				}
-
-				String extension = f.getName().substring(f.getName().lastIndexOf(".") + 1, f.getName().length());
-
-				if(extension != null)
-				{
-					if(extension.equals("txt"))
-					{
-						return true;
-					}
-				}
-				else
-				{
-					return false;
-				}
-
-				return false;
-			}
-
-			@Override
-			public String getDescription()
-			{
-				return "*.txt";
-			}
-		});
+		// Adds the filter to ignore all other files but .txt
+		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
 
 		int returnVal = fileChooser.showSaveDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION)
@@ -879,15 +839,8 @@ public class MainFrame extends JFrame
 	
 	private void addValue(float value)
 	{
-		DefaultTableModel tableModel = (DefaultTableModel) this.dataTable.getModel();
-		if(firstData || addedValue && (this.i % 4) == 0)
-		{
-			tableModel.addRow(new Object[]{null, null, null, null});
-		}
 		if (checkBounds(value))
 		{
-			tableModel.setValueAt(value, this.i / 4, this.i % 4);
-			this.i++;
 			this.dataList.add(value);
 			if(value < this.minGrade)
 			{
@@ -913,15 +866,55 @@ public class MainFrame extends JFrame
 		calculatePartitions(value);
 	}
 	
-	private void clearData()
+	/**
+	 * Synchronize the table with the main datalist. Sorts the list and puts the
+	 * data into the the table in decending columns. Call this method after changing
+	 * the datalsit
+	 *
+	 */
+	private void updateTable()
 	{
 		DefaultTableModel tableModel = (DefaultTableModel) this.dataTable.getModel();
-		int count = tableModel.getRowCount();
-		for (int i = count; i > 0; i--)
+
+		// Remove any null values
+		while(dataList.contains(null))
+			dataList.remove(null);
+
+		// Sort the data list
+		dataList.sort(null);
+
+		int rows = (int) Math.ceil((dataList.size() / 4.0));
+
+		Float[][] dataVector = new Float[rows][4];
+
+		for(int col = 0; col < 4; col++)
 		{
-			tableModel.removeRow(i - 1);
+			for(int row = 0; row < rows; row++)
+			{
+				// Calculate the array position
+				// Flips the position to make the order descending
+				int loc = (dataList.size() - 1) - (col * rows + row);
+
+				if(loc < 0)
+				{
+					dataVector[row][col] = null;
+				}
+				else
+				{
+					dataVector[row][col] = dataList.get(loc);
+				}
+			}
 		}
-		i = 0;
+
+		tableModel.setDataVector(dataVector, new String[]{"A", "B", "C", "D"});
+	}
+
+	private void clearData()
+	{
+		dataList.clear();
+		updateTable();
+		setAnalytics();
+		setGraph();
 	}
 	
 	private void parseFile(File file)
@@ -1054,15 +1047,21 @@ public class MainFrame extends JFrame
 	 */
 	private float findMedian()
 	{
+		if(dataList.isEmpty())
+			return 0;
+		
 		List<Float> listCopy = new ArrayList<>(dataList);
 		listCopy.sort(null);
-		return listCopy.get(this.i / 2);
+		return listCopy.get(listCopy.size() / 2);
 	}
 	/*
 	 * Finds the mode of the current data set
 	 */
 	private float findMode()
 	{
+		if(dataList.isEmpty())
+			return 0;
+		
 		int currentCount = 1;
 		int maxCount = 0;
 		float mode = this.dataList.get(0);
@@ -1092,7 +1091,7 @@ public class MainFrame extends JFrame
 	 */
 	private void setAnalytics()
 	{
-		this.numEntriesLabel.setText("Number of Entries: " + this.i);
+		this.numEntriesLabel.setText("Number of Entries: " + dataList.size());
 		if(!firstData)
 		{
 			this.maxGradeLabel.setText("Max Grade: " + this.maxGrade);

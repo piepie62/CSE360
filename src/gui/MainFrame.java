@@ -7,10 +7,13 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,6 +108,17 @@ public class MainFrame extends JFrame
 	int numbers80Count = 0;
 	int numbers90Count = 0;
 	
+	float numbers0Total = 0;
+	float numbers10Total = 0;
+	float numbers20Total = 0;
+	float numbers30Total = 0;
+	float numbers40Total = 0;
+	float numbers50Total = 0;
+	float numbers60Total = 0;
+	float numbers70Total = 0;
+	float numbers80Total = 0;
+	float numbers90Total = 0;
+	
 	String numbers0Bar = "";
 	String numbers10Bar = "";
 	String numbers20Bar = "";
@@ -115,12 +129,16 @@ public class MainFrame extends JFrame
 	String numbers70Bar = "";
 	String numbers80Bar = "";
 	String numbers90Bar = "";
+	
+	String allActionsPerformed = "";
+	
 	boolean firstData = true;
 	boolean addedValue = false;
 	float lower = 0;
 	float upper = 100;
 	float maxGrade = -1000000000;
 	float minGrade = 1000000000;
+	
 	/**
 	 * Constructor to create a MainFrame. Upon instantiation, the frame then needs
 	 * to be set as visible to be shown to the user.
@@ -500,6 +518,9 @@ public class MainFrame extends JFrame
 			parseFile(file);
 		
 		this.updateTable();
+		
+		setAnalytics();
+		setGraph();
 	}
 
 	/**
@@ -516,6 +537,9 @@ public class MainFrame extends JFrame
 			parseFile(file);
 		
 		this.updateTable();
+		
+		setAnalytics();
+		setGraph();
 	}
 
 	/**
@@ -587,7 +611,7 @@ public class MainFrame extends JFrame
 		
 		if(!dataList.contains(number))
 		{
-			System.out.println("Table does not contain " + number);
+			allActionsPerformed += "Could not remove value. Table does not contain " + valueForm.getValue() + ".\n";
 		}
 		else
 		{
@@ -604,6 +628,17 @@ public class MainFrame extends JFrame
 			numbers80Count = 0;
 			numbers90Count = 0;
 			
+			numbers0Total = 0;
+			numbers10Total = 0;
+			numbers20Total = 0;
+			numbers30Total = 0;
+			numbers40Total = 0;
+			numbers50Total = 0;
+			numbers60Total = 0;
+			numbers70Total = 0;
+			numbers80Total = 0;
+			numbers90Total = 0;
+			
 			numbers0Bar = "";
 			numbers10Bar = "";
 			numbers20Bar = "";
@@ -617,14 +652,14 @@ public class MainFrame extends JFrame
 			
 			for(float f : dataList)
 				this.calculatePartitions(f);
+			
+			allActionsPerformed += "Value deleted: " + valueForm.getValue() + "\n";
 		}
 		
 		setAnalytics();
 		setGraph();
 		
 		this.updateTable();
-
-		System.out.println("Value entered: " + valueForm.getValue());
 	}
 
 	/**
@@ -682,7 +717,7 @@ public class MainFrame extends JFrame
 		
 		this.updateTable();
 		
-		System.out.println("Value entered: " + valueForm.getValue());
+		allActionsPerformed += "Value inserted: " + valueForm.getValue() + ".\n";
 	}
 
 	/**
@@ -705,6 +740,9 @@ public class MainFrame extends JFrame
 		}
 		
 		this.updateTable();
+		
+		setAnalytics();
+		setGraph();
 	}
 
 	/**
@@ -727,6 +765,9 @@ public class MainFrame extends JFrame
 		}
 		
 		this.updateTable();
+		
+		setAnalytics();
+		setGraph();
 	}
 
 	/**
@@ -770,6 +811,8 @@ public class MainFrame extends JFrame
 		}
 		
 		dataList.removeAll(toRemoveList);
+		
+		this.updateTable();
 	}
 
 	/**
@@ -794,7 +837,7 @@ public class MainFrame extends JFrame
 		if(returnVal == JFileChooser.APPROVE_OPTION)
 		{
 			File file = fileChooser.getSelectedFile();
-			System.out.println(file.getName());
+			allActionsPerformed +="Loaded file: " + file.getName() + ".\n";
 			return file;
 		}
 		else
@@ -826,6 +869,15 @@ public class MainFrame extends JFrame
 		if(returnVal == JFileChooser.APPROVE_OPTION)
 		{
 			File file = fileChooser.getSelectedFile();
+			try (Writer summary = new BufferedWriter(new FileWriter(file.getName())))
+			{
+				summary.write(allActionsPerformed);
+				summary.close();
+			}
+			catch (IOException ex)
+			{
+				
+			}
 			System.out.println(file.getName());
 			return file;
 		}
@@ -837,6 +889,11 @@ public class MainFrame extends JFrame
 		return null;
 	}
 	
+	/**
+	 * Adds the value to the data table and list.
+	 * 
+	 * @param value	the number to be added
+	 */
 	private void addValue(float value)
 	{
 		if (checkBounds(value))
@@ -867,10 +924,9 @@ public class MainFrame extends JFrame
 	}
 	
 	/**
-	 * Synchronize the table with the main datalist. Sorts the list and puts the
-	 * data into the the table in decending columns. Call this method after changing
-	 * the datalsit
-	 *
+	 * Synchronize the table with the main data list. Sorts the list and puts the
+	 * data into the the table in descending columns. Call this method after changing
+	 * the data list.
 	 */
 	private void updateTable()
 	{
@@ -881,7 +937,17 @@ public class MainFrame extends JFrame
 			dataList.remove(null);
 
 		// Sort the data list
-		dataList.sort(null);
+		dataList.sort((Float f1, Float f2)->{
+			if (f1 > f2)
+			{
+				return -1;
+			}
+			else if (f1 < f2)
+			{
+				return 1;
+			}
+			return 0;
+		});
 
 		int rows = (int) Math.ceil((dataList.size() / 4.0));
 
@@ -892,14 +958,8 @@ public class MainFrame extends JFrame
 			for(int row = 0; row < rows; row++)
 			{
 				// Calculate the array position
-				// Flips the position to make the order descending
-				int loc = (dataList.size() - 1) - (col * rows + row);
-
-				if(loc < 0)
-				{
-					dataVector[row][col] = null;
-				}
-				else
+				int loc = row * 4 + col;
+				if (loc < dataList.size())
 				{
 					dataVector[row][col] = dataList.get(loc);
 				}
@@ -909,6 +969,9 @@ public class MainFrame extends JFrame
 		tableModel.setDataVector(dataVector, new String[]{"A", "B", "C", "D"});
 	}
 
+	/**
+	 * Clears the data table and list of all values.
+	 */
 	private void clearData()
 	{
 		dataList.clear();
@@ -917,6 +980,11 @@ public class MainFrame extends JFrame
 		setGraph();
 	}
 	
+	/**
+	 * Opens the file and adds the values to the data table.
+	 * 
+	 * @param file	the requested file to be opened
+	 */
 	private void parseFile(File file)
 	{
 		try {
@@ -947,6 +1015,9 @@ public class MainFrame extends JFrame
 		}
 	}
 	
+	/**
+	 * Sets the upper and lower bounds.
+	 */
 	private void setBounds()
 	{
 		BoundarySetForm boundsDialog = new BoundarySetForm(this, true);
@@ -958,6 +1029,12 @@ public class MainFrame extends JFrame
 		boundsDialog.setVisible(true);
 	}
 	
+	/**
+	 * Tests the value against the currently set bounds.
+	 * 
+	 * @param	value	the number that will be tested
+	 * @return	whether it is true or false if the value is within bounds
+	 */
 	private boolean checkBounds(float value)
 	{
 		return lower <= value && upper >= value;
@@ -973,42 +1050,52 @@ public class MainFrame extends JFrame
 		if(value >= 0 && value < 10)
 		{
 			numbers0Count++;
+			numbers0Total = numbers0Total + value;
 		}
 		else if(value >= 10 && value < 20)
 		{
 			numbers10Count++;
+			numbers10Total = numbers10Total + value;
 		}
 		else if(value >= 20 && value < 30)
 		{
 			numbers20Count++;
+			numbers20Total = numbers20Total + value;
 		}
 		else if(value >= 30 && value < 40)
 		{
 			numbers30Count++;
+			numbers30Total = numbers30Total + value;
 		}
 		else if(value >= 40 && value < 50)
 		{
 			numbers40Count++;
+			numbers40Total = numbers40Total + value;
 		}
 		else if(value >= 50 && value < 60)
 		{
 			numbers50Count++;
+			numbers50Total = numbers50Total + value;
 		}
 		else if(value >= 60 && value < 70)
 		{
 			numbers60Count++;
+			numbers60Total = numbers60Total + value;
 		}
 		else if(value >= 70 && value < 80)
 		{
 			numbers70Count++;
+			numbers70Total = numbers70Total + value;
 		}
 		else if(value >= 80 && value < 90)
 		{
 			numbers80Count++;
+			numbers80Total = numbers80Total + value;
 		}
 		else if(value >= 90 && value <= 100)
 		{
 			numbers90Count++;
+			numbers90Total = numbers90Total + value;
 		}
 	}
 	
@@ -1030,8 +1117,11 @@ public class MainFrame extends JFrame
 		
 		return bar;
 	}
-	/*
-	 * Finds the mean of the current data set
+	
+	/**
+	 * Finds the mean of the current data set.
+	 *
+	 *@return the mean of the data
 	 */
 	private float findMean()
 	{
@@ -1042,8 +1132,11 @@ public class MainFrame extends JFrame
 		}
 		return total / (float)this.dataList.size();
 	}
-	/*
-	 * Finds the median of the current data set
+	
+	/**
+	 * Finds the median of the current data set.
+	 * 
+	 * @return the median of the data
 	 */
 	private float findMedian()
 	{
@@ -1054,8 +1147,11 @@ public class MainFrame extends JFrame
 		listCopy.sort(null);
 		return listCopy.get(listCopy.size() / 2);
 	}
-	/*
-	 * Finds the mode of the current data set
+	
+	/**
+	 * Finds the mode of the current data set.
+	 * 
+	 * @return	the mode of the data
 	 */
 	private float findMode()
 	{
@@ -1086,6 +1182,7 @@ public class MainFrame extends JFrame
 		}
 		return mode;
 	}
+	
 	/**
 	 * Sets the analytics and distribution values.
 	 */
@@ -1100,16 +1197,16 @@ public class MainFrame extends JFrame
 		this.meanLabel.setText("Mean: " + findMean());
 		this.medianLabel.setText("Median: " + findMedian());
 		this.modeLabel.setText("Mode: " + findMode());
-		this.percentage90Label.setText("90%-100%: " + numbers90Count);
-		this.percentage80Label.setText("80%-89%: " + numbers80Count);
-		this.percentage70Label.setText("70%-79%: " + numbers70Count);
-		this.percentage60Label.setText("60%-69%: " + numbers60Count);
-		this.percentage50Label.setText("50%-59%: " + numbers50Count);
-		this.percentage40Label.setText("40%-49%: " + numbers40Count);
-		this.percentage30Label.setText("30%-39%: " + numbers30Count);
-		this.percentage20Label.setText("20%-29%: " + numbers20Count);
-		this.percentage10Label.setText("10%-19%: " + numbers10Count);
-		this.percentage0Label.setText("0%-9%: " + numbers0Count);
+		this.percentage90Label.setText("90%-100%: " + (numbers90Total / numbers90Count));
+		this.percentage80Label.setText("80%-89%: " + (numbers80Total / numbers80Count));
+		this.percentage70Label.setText("70%-79%: " + (numbers70Total / numbers70Count));
+		this.percentage60Label.setText("60%-69%: " + (numbers60Total / numbers60Count));
+		this.percentage50Label.setText("50%-59%: " + (numbers50Total / numbers50Count));
+		this.percentage40Label.setText("40%-49%: " + (numbers40Total / numbers40Count));
+		this.percentage30Label.setText("30%-39%: " + (numbers30Total / numbers30Count));
+		this.percentage20Label.setText("20%-29%: " + (numbers20Total / numbers20Count));
+		this.percentage10Label.setText("10%-19%: " + (numbers10Total / numbers10Count));
+		this.percentage0Label.setText("0%-9%: " + (numbers0Total / numbers0Count));
 	}
 	
 	/**

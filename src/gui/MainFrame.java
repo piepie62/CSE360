@@ -624,45 +624,27 @@ public class MainFrame extends JFrame {
 				summary.write(allActionsPerformed);
 				setDataListToText();
 				summary.write(dataListText);
-				summary.write("\nANALYTICS\n"
-						+ "Number of Entries: " + dataList.size() + "\n"
-						+ "Max Grade: " + this.maxGrade + "\n"
-						+ "Min Grade: " + this.minGrade + "\n"
-						+ "Mean: " + findMean() + "\n"
-						+ "Median: " + findMedian() + "\n"
-						+ "Mode: " + findMode() + "\n"
-						+ "\nDISTRIBUTION\n"
-						+ "90%-100%: " + (numbers90Total / numbers90Count) + "\n"
-						+ "80%-89%: " + (numbers80Total / numbers80Count) + "\n"
-						+ "70%-79%: " + (numbers70Total / numbers70Count) + "\n"
-						+ "60%-69%: " + (numbers60Total / numbers60Count) + "\n"
-						+ "50%-59%: " + (numbers50Total / numbers50Count) + "\n"
-						+ "40%-49%: " + (numbers40Total / numbers40Count) + "\n"
-						+ "30%-39%: " + (numbers30Total / numbers30Count) + "\n"
-						+ "20%-29%: " + (numbers20Total / numbers20Count) + "\n"
-						+ "10%-19%: " + (numbers10Total / numbers10Count) + "\n"
-						+ "0%-9%: " + (numbers0Total / numbers0Count) + "\n");
-				summary.write("\nGRAPH OF NUMBER OF GRADES:\n"
-						+ "\t|\n" 
-						+ "90%-100%|" + calculateGraphBars(numbers90Bar, numbers90Count) + "|\n"
-						+ "\t|\n"
-						+ " 80%-89%|" + calculateGraphBars(numbers80Bar, numbers80Count) + "|\n"
-						+ "\t|\n"
-						+ " 70%-79%|" + calculateGraphBars(numbers70Bar, numbers70Count) + "|\n"
-						+ "\t|\n"
-						+ " 60%-69%|" + calculateGraphBars(numbers60Bar, numbers60Count) + "|\n"
-						+ "\t|\n"
-						+ " 50%-59%|" + calculateGraphBars(numbers50Bar, numbers50Count) + "|\n"
-						+ "\t|\n"
-						+ " 40%-49%|" + calculateGraphBars(numbers40Bar, numbers40Count) + "|\n"
-						+ "\t|\n"
-						+ " 30%-39%|" + calculateGraphBars(numbers30Bar, numbers30Count) + "|\n"
-						+ "\t|\n"
-						+ " 20%-29%|" + calculateGraphBars(numbers20Bar, numbers20Count) + "|\n"
-						+ "\t|\n"
-						+ " 10%-19%|" + calculateGraphBars(numbers10Bar, numbers10Count) + "|\n"
-						+ "\t|\n"
-						+ "   0%-9%|" + calculateGraphBars(numbers0Bar, numbers0Count) + "|\n"
+				summary.write("\nANALYTICS\n" + "Number of Entries: " + dataList.size() + "\n" + "Max Grade: "
+						+ this.maxGrade + "\n" + "Min Grade: " + this.minGrade + "\n" + "Mean: " + findMean() + "\n"
+						+ "Median: " + findMedian() + "\n" + "Mode: " + findMode() + "\n" + "\nDISTRIBUTION\n"
+						+ "90%-100%: " + (numbers90Total / numbers90Count) + "\n" + "80%-89%: "
+						+ (numbers80Total / numbers80Count) + "\n" + "70%-79%: " + (numbers70Total / numbers70Count)
+						+ "\n" + "60%-69%: " + (numbers60Total / numbers60Count) + "\n" + "50%-59%: "
+						+ (numbers50Total / numbers50Count) + "\n" + "40%-49%: " + (numbers40Total / numbers40Count)
+						+ "\n" + "30%-39%: " + (numbers30Total / numbers30Count) + "\n" + "20%-29%: "
+						+ (numbers20Total / numbers20Count) + "\n" + "10%-19%: " + (numbers10Total / numbers10Count)
+						+ "\n" + "0%-9%: " + (numbers0Total / numbers0Count) + "\n");
+				summary.write("\nGRAPH OF NUMBER OF GRADES:\n" + "\t|\n" + "90%-100%|"
+						+ calculateGraphBars(numbers90Bar, numbers90Count) + "|\n" + "\t|\n" + " 80%-89%|"
+						+ calculateGraphBars(numbers80Bar, numbers80Count) + "|\n" + "\t|\n" + " 70%-79%|"
+						+ calculateGraphBars(numbers70Bar, numbers70Count) + "|\n" + "\t|\n" + " 60%-69%|"
+						+ calculateGraphBars(numbers60Bar, numbers60Count) + "|\n" + "\t|\n" + " 50%-59%|"
+						+ calculateGraphBars(numbers50Bar, numbers50Count) + "|\n" + "\t|\n" + " 40%-49%|"
+						+ calculateGraphBars(numbers40Bar, numbers40Count) + "|\n" + "\t|\n" + " 30%-39%|"
+						+ calculateGraphBars(numbers30Bar, numbers30Count) + "|\n" + "\t|\n" + " 20%-29%|"
+						+ calculateGraphBars(numbers20Bar, numbers20Count) + "|\n" + "\t|\n" + " 10%-19%|"
+						+ calculateGraphBars(numbers10Bar, numbers10Count) + "|\n" + "\t|\n" + "   0%-9%|"
+						+ calculateGraphBars(numbers0Bar, numbers0Count) + "|\n"
 						+ "\t|___|___|___|___|___|___|___|___|___|___|___|___|\n"
 						+ "       \t0  10  20  30  40  50  60  70  80  90  100 110  MAX");
 				summary.write("\n\nERRORS:\n" + errors);
@@ -704,27 +686,7 @@ public class MainFrame extends JFrame {
 		} else {
 			dataList.remove(number);
 
-			numbers0Count = 0;
-			numbers10Count = 0;
-			numbers20Count = 0;
-			numbers30Count = 0;
-			numbers40Count = 0;
-			numbers50Count = 0;
-			numbers60Count = 0;
-			numbers70Count = 0;
-			numbers80Count = 0;
-			numbers90Count = 0;
-
-			numbers0Total = 0;
-			numbers10Total = 0;
-			numbers20Total = 0;
-			numbers30Total = 0;
-			numbers40Total = 0;
-			numbers50Total = 0;
-			numbers60Total = 0;
-			numbers70Total = 0;
-			numbers80Total = 0;
-			numbers90Total = 0;
+			clearPartitions();
 
 			numbers0Bar = "";
 			numbers10Bar = "";
@@ -1006,7 +968,7 @@ public class MainFrame extends JFrame {
 		for (int col = 0; col < 4; col++) {
 			for (int row = 0; row < rows; row++) {
 				// Calculate the array position
-				int loc = row + col*rows;
+				int loc = row + col * rows;
 				if (loc < dataList.size()) {
 					dataVector[row][col] = dataList.get(loc);
 				}
@@ -1024,6 +986,7 @@ public class MainFrame extends JFrame {
 		updateTable();
 		setAnalytics();
 		setGraph();
+		clearPartitions();
 	}
 
 	/**
@@ -1122,6 +1085,29 @@ public class MainFrame extends JFrame {
 			numbers90Count++;
 			numbers90Total = numbers90Total + value;
 		}
+	}
+
+	private void clearPartitions() {
+		numbers0Count = 0;
+		numbers0Total = 0;
+		numbers10Count = 0;
+		numbers10Total = 0;
+		numbers20Count = 0;
+		numbers20Total = 0;
+		numbers30Count = 0;
+		numbers30Total = 0;
+		numbers40Count = 0;
+		numbers40Total = 0;
+		numbers50Count = 0;
+		numbers50Total = 0;
+		numbers60Count = 0;
+		numbers60Total = 0;
+		numbers70Count = 0;
+		numbers70Total = 0;
+		numbers80Count = 0;
+		numbers80Total = 0;
+		numbers90Count = 0;
+		numbers90Total = 0;
 	}
 
 	/**
@@ -1239,19 +1225,16 @@ public class MainFrame extends JFrame {
 				+ "\t|___|___|___|___|___|___|___|___|___|___|___|___|\n"
 				+ "       \t0  10  20  30  40  50  60  70  80  90  100 110  MAX");
 	}
-	
-	private void setDataListToText()
-	{
-		for(int add = 0; add < dataList.size(); add++)
-		{
-			if(add % 4 == 0)
-			{
+
+	private void setDataListToText() {
+		for (int add = 0; add < dataList.size(); add++) {
+			if (add % 4 == 0) {
 				dataListText += "\n";
 			}
-			
+
 			dataListText += "\t" + dataList.get(add);
 		}
-		
+
 		dataListText += "\n";
 	}
 }

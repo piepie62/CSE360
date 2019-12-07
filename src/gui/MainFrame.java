@@ -96,16 +96,16 @@ public class MainFrame extends JFrame {
 	String errors = "";
 	String[] numbers;
 
-	int numbers0Count = 0;
-	int numbers10Count = 0;
-	int numbers20Count = 0;
-	int numbers30Count = 0;
-	int numbers40Count = 0;
-	int numbers50Count = 0;
-	int numbers60Count = 0;
-	int numbers70Count = 0;
-	int numbers80Count = 0;
-	int numbers90Count = 0;
+	int numbers0Count = 1;
+	int numbers10Count = 1;
+	int numbers20Count = 1;
+	int numbers30Count = 1;
+	int numbers40Count = 1;
+	int numbers50Count = 1;
+	int numbers60Count = 1;
+	int numbers70Count = 1;
+	int numbers80Count = 1;
+	int numbers90Count = 1;
 
 	float numbers0Total = 0;
 	float numbers10Total = 0;
@@ -1054,6 +1054,19 @@ public class MainFrame extends JFrame {
 	 * @param value the data value that was taken from the source file
 	 */
 	private void calculatePartitions(float value) {
+		if(dataList.size() == 1) {
+			numbers0Count = 0;
+			numbers10Count = 0;
+			numbers20Count = 0;
+			numbers30Count = 0;
+			numbers40Count = 0;
+			numbers50Count = 0;
+			numbers60Count = 0;
+			numbers70Count = 0;
+			numbers80Count = 0;
+			numbers90Count = 0;
+		}
+		
 		if (value >= 0 && value < 10) {
 			numbers0Count++;
 			numbers0Total = numbers0Total + value;
@@ -1132,11 +1145,17 @@ public class MainFrame extends JFrame {
 	 * @return the mean of the data
 	 */
 	private float findMean() {
+		float mean = 0;
 		float total = 0;
 		for (int meanLoop = 0; meanLoop < this.dataList.size(); meanLoop++) {
 			total += this.dataList.get(meanLoop);
 		}
-		return total / (float) this.dataList.size();
+		
+		if (dataList.size() != 0) {
+			mean = total / (float) this.dataList.size();
+		}
+		
+		return mean;
 	}
 
 	/**
@@ -1192,6 +1211,10 @@ public class MainFrame extends JFrame {
 		if (!firstData) {
 			this.maxGradeLabel.setText("Max Grade: " + this.maxGrade);
 			this.minGradeLabel.setText("Min Grade: " + this.minGrade);
+		}
+		else {
+			this.maxGradeLabel.setText("Max Grade: " + 0.0);
+			this.minGradeLabel.setText("Min Grade: " + 0.0);
 		}
 		this.meanLabel.setText("Mean: " + findMean());
 		this.medianLabel.setText("Median: " + findMedian());

@@ -1089,6 +1089,9 @@ public class MainFrame extends JFrame {
 		}
 	}
 
+	/**
+	 * Erases the partition values so that they can be recalculated
+	 */
 	private void clearPartitions() {
 		numbers0Count = 0;
 		numbers0Total = 0;
@@ -1238,6 +1241,9 @@ public class MainFrame extends JFrame {
 				+ "       \t0  10  20  30  40  50  60  70  80  90  100 110  MAX");
 	}
 
+	/**
+	 * Fills dataListText with the current data list
+	 */
 	private void setDataListToText() {
 		dataListText = "";
 		for (int add = 0; add < dataList.size(); add++) {
@@ -1251,6 +1257,9 @@ public class MainFrame extends JFrame {
 		dataListText += "\n";
 	}
 	
+	/**
+	 * Calculates the maximum grade
+	 */
 	private float maxGrade() {
 		float ret = Float.NEGATIVE_INFINITY;
 		for (float f : dataList)
@@ -1264,6 +1273,9 @@ public class MainFrame extends JFrame {
 		return ret == Float.NEGATIVE_INFINITY ? 0 : ret;
 	}
 	
+	/**
+	 * Calculates the minimum grade
+	 */
 	private float minGrade() {
 		float ret = Float.POSITIVE_INFINITY;
 		for (float f : dataList)
@@ -1277,6 +1289,9 @@ public class MainFrame extends JFrame {
 		return ret == Float.POSITIVE_INFINITY ? 0 : ret;
 	}
 	
+	/**
+	 * Calculates an average, or zero if count is 0
+	 */
 	private float getDistributionAverage(float total, int count) {
 		float average = 0;
 		

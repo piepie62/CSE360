@@ -45,7 +45,7 @@ public class BoundarySetForm extends JDialog
 
 		this.lowGradeLabel.setText("Lowest Grade");
 
-		this.highGradeLabel.setText("Heighest Grade");
+		this.highGradeLabel.setText("Highest Grade");
 
 		this.highBoundaryField.setText("100");
 

@@ -1006,7 +1006,7 @@ public class MainFrame extends JFrame {
 		for (int col = 0; col < 4; col++) {
 			for (int row = 0; row < rows; row++) {
 				// Calculate the array position
-				int loc = row * 4 + col;
+				int loc = row + col*rows;
 				if (loc < dataList.size()) {
 					dataVector[row][col] = dataList.get(loc);
 				}

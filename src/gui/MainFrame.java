@@ -136,8 +136,6 @@ public class MainFrame extends JFrame {
 	boolean addedValue = false;
 	float lower = 0;
 	float upper = 100;
-	float maxGrade = -1000000000;
-	float minGrade = 1000000000;
 
 	/**
 	 * Constructor to create a MainFrame. Upon instantiation, the frame then needs
@@ -625,7 +623,7 @@ public class MainFrame extends JFrame {
 				setDataListToText();
 				summary.write(dataListText);
 				summary.write("\nANALYTICS\n" + "Number of Entries: " + dataList.size() + "\n" + "Max Grade: "
-						+ this.maxGrade + "\n" + "Min Grade: " + this.minGrade + "\n" + "Mean: " + findMean() + "\n"
+						+ this.maxGrade() + "\n" + "Min Grade: " + this.minGrade() + "\n" + "Mean: " + findMean() + "\n"
 						+ "Median: " + findMedian() + "\n" + "Mode: " + findMode() + "\n" + "\nDISTRIBUTION\n"
 						+ "90%-100%: " + (numbers90Total / numbers90Count) + "\n" + "80%-89%: "
 						+ (numbers80Total / numbers80Count) + "\n" + "70%-79%: " + (numbers70Total / numbers70Count)
@@ -920,12 +918,6 @@ public class MainFrame extends JFrame {
 	private void addValue(float value) {
 		if (checkBounds(value)) {
 			this.dataList.add(value);
-			if (value < this.minGrade) {
-				this.minGrade = value;
-			}
-			if (value > this.maxGrade) {
-				this.maxGrade = value;
-			}
 			addedValue = true;
 			firstData = false;
 		} else {
@@ -1209,8 +1201,8 @@ public class MainFrame extends JFrame {
 	private void setAnalytics() {
 		this.numEntriesLabel.setText("Number of Entries: " + dataList.size());
 		if (!firstData) {
-			this.maxGradeLabel.setText("Max Grade: " + this.maxGrade);
-			this.minGradeLabel.setText("Min Grade: " + this.minGrade);
+			this.maxGradeLabel.setText("Max Grade: " + this.maxGrade());
+			this.minGradeLabel.setText("Min Grade: " + this.minGrade());
 		}
 		else {
 			this.maxGradeLabel.setText("Max Grade: " + 0.0);
@@ -1259,5 +1251,31 @@ public class MainFrame extends JFrame {
 		}
 
 		dataListText += "\n";
+	}
+	
+	private float maxGrade() {
+		float ret = Float.NEGATIVE_INFINITY;
+		for (float f : dataList)
+		{
+			if (f > ret)
+			{
+				ret = f;
+			}
+		}
+		
+		return ret == Float.NEGATIVE_INFINITY ? 0 : ret;
+	}
+	
+	private float minGrade() {
+		float ret = Float.POSITIVE_INFINITY;
+		for (float f : dataList)
+		{
+			if (f < ret)
+			{
+				ret = f;
+			}
+		}
+		
+		return ret == Float.POSITIVE_INFINITY ? 0 : ret;
 	}
 }

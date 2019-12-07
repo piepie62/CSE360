@@ -964,6 +964,8 @@ public class MainFrame extends JFrame {
 		int rows = (int) Math.ceil((dataList.size() / 4.0));
 
 		Float[][] dataVector = new Float[rows][4];
+		
+		this.clearPartitions();
 
 		for (int col = 0; col < 4; col++) {
 			for (int row = 0; row < rows; row++) {
@@ -971,6 +973,7 @@ public class MainFrame extends JFrame {
 				int loc = row + col * rows;
 				if (loc < dataList.size()) {
 					dataVector[row][col] = dataList.get(loc);
+					this.calculatePartitions(dataList.get(loc));
 				}
 			}
 		}

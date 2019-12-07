@@ -1059,34 +1059,36 @@ public class MainFrame extends JFrame {
 			numbers90Count = 0;
 		}
 		
-		if (value >= 0 && value < 10) {
+		float percent = (value - lower) / upper;
+		
+		if (percent < .1) {
 			numbers0Count++;
 			numbers0Total = numbers0Total + value;
-		} else if (value >= 10 && value < 20) {
+		} else if (percent >= .1 && percent < .2) {
 			numbers10Count++;
 			numbers10Total = numbers10Total + value;
-		} else if (value >= 20 && value < 30) {
+		} else if (percent >= .2 && percent < .3) {
 			numbers20Count++;
 			numbers20Total = numbers20Total + value;
-		} else if (value >= 30 && value < 40) {
+		} else if (percent >= .3 && percent < .4) {
 			numbers30Count++;
 			numbers30Total = numbers30Total + value;
-		} else if (value >= 40 && value < 50) {
+		} else if (percent >= .4 && percent < .5) {
 			numbers40Count++;
 			numbers40Total = numbers40Total + value;
-		} else if (value >= 50 && value < 60) {
+		} else if (percent >= .5 && percent < .6) {
 			numbers50Count++;
 			numbers50Total = numbers50Total + value;
-		} else if (value >= 60 && value < 70) {
+		} else if (percent >= .6 && percent < .7) {
 			numbers60Count++;
 			numbers60Total = numbers60Total + value;
-		} else if (value >= 70 && value < 80) {
+		} else if (percent >= .7 && percent < .8) {
 			numbers70Count++;
 			numbers70Total = numbers70Total + value;
-		} else if (value >= 80 && value < 90) {
+		} else if (percent >= .8 && percent < .9) {
 			numbers80Count++;
 			numbers80Total = numbers80Total + value;
-		} else if (value >= 90 && value <= 100) {
+		} else if (percent >= .9) {
 			numbers90Count++;
 			numbers90Total = numbers90Total + value;
 		}

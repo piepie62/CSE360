@@ -1059,7 +1059,7 @@ public class MainFrame extends JFrame {
 			numbers90Count = 0;
 		}
 		
-		float percent = (value - lower) / upper;
+		float percent = Math.abs((value - lower) / (upper - lower));
 		
 		if (percent < .1) {
 			numbers0Count++;

@@ -96,16 +96,16 @@ public class MainFrame extends JFrame {
 	String errors = "";
 	String[] numbers;
 
-	int numbers0Count = 1;
-	int numbers10Count = 1;
-	int numbers20Count = 1;
-	int numbers30Count = 1;
-	int numbers40Count = 1;
-	int numbers50Count = 1;
-	int numbers60Count = 1;
-	int numbers70Count = 1;
-	int numbers80Count = 1;
-	int numbers90Count = 1;
+	int numbers0Count = 0;
+	int numbers10Count = 0;
+	int numbers20Count = 0;
+	int numbers30Count = 0;
+	int numbers40Count = 0;
+	int numbers50Count = 0;
+	int numbers60Count = 0;
+	int numbers70Count = 0;
+	int numbers80Count = 0;
+	int numbers90Count = 0;
 
 	float numbers0Total = 0;
 	float numbers10Total = 0;
@@ -625,13 +625,13 @@ public class MainFrame extends JFrame {
 				summary.write("\nANALYTICS\n" + "Number of Entries: " + dataList.size() + "\n" + "Max Grade: "
 						+ this.maxGrade() + "\n" + "Min Grade: " + this.minGrade() + "\n" + "Mean: " + findMean() + "\n"
 						+ "Median: " + findMedian() + "\n" + "Mode: " + findMode() + "\n" + "\nDISTRIBUTION\n"
-						+ "90%-100%: " + (numbers90Total / numbers90Count) + "\n" + "80%-89%: "
-						+ (numbers80Total / numbers80Count) + "\n" + "70%-79%: " + (numbers70Total / numbers70Count)
-						+ "\n" + "60%-69%: " + (numbers60Total / numbers60Count) + "\n" + "50%-59%: "
-						+ (numbers50Total / numbers50Count) + "\n" + "40%-49%: " + (numbers40Total / numbers40Count)
-						+ "\n" + "30%-39%: " + (numbers30Total / numbers30Count) + "\n" + "20%-29%: "
-						+ (numbers20Total / numbers20Count) + "\n" + "10%-19%: " + (numbers10Total / numbers10Count)
-						+ "\n" + "0%-9%: " + (numbers0Total / numbers0Count) + "\n");
+						+ "90%-100%: " + getDistributionAverage(numbers90Total, numbers90Count) + "\n" + "80%-89%: "
+						+ getDistributionAverage(numbers80Total, numbers80Count) + "\n" + "70%-79%: " + getDistributionAverage(numbers70Total, numbers70Count)
+						+ "\n" + "60%-69%: " + getDistributionAverage(numbers60Total, numbers60Count) + "\n" + "50%-59%: "
+						+ getDistributionAverage(numbers50Total, numbers50Count) + "\n" + "40%-49%: " + getDistributionAverage(numbers40Total, numbers40Count)
+						+ "\n" + "30%-39%: " + getDistributionAverage(numbers30Total, numbers30Count) + "\n" + "20%-29%: "
+						+ getDistributionAverage(numbers20Total, numbers20Count) + "\n" + "10%-19%: " + getDistributionAverage(numbers10Total, numbers10Count)
+						+ "\n" + "0%-9%: " + getDistributionAverage(numbers0Total, numbers0Count) + "\n");
 				summary.write("\nGRAPH OF NUMBER OF GRADES:\n" + "\t|\n" + "90%-100%|"
 						+ calculateGraphBars(numbers90Bar, numbers90Count) + "|\n" + "\t|\n" + " 80%-89%|"
 						+ calculateGraphBars(numbers80Bar, numbers80Count) + "|\n" + "\t|\n" + " 70%-79%|"
@@ -1054,19 +1054,6 @@ public class MainFrame extends JFrame {
 	 * @param value the data value that was taken from the source file
 	 */
 	private void calculatePartitions(float value) {
-		if(dataList.size() == 1) {
-			numbers0Count = 0;
-			numbers10Count = 0;
-			numbers20Count = 0;
-			numbers30Count = 0;
-			numbers40Count = 0;
-			numbers50Count = 0;
-			numbers60Count = 0;
-			numbers70Count = 0;
-			numbers80Count = 0;
-			numbers90Count = 0;
-		}
-		
 		float percent = Math.abs((value - lower) / (upper - lower));
 		
 		if (percent < .1) {
@@ -1221,16 +1208,16 @@ public class MainFrame extends JFrame {
 		this.meanLabel.setText("Mean: " + findMean());
 		this.medianLabel.setText("Median: " + findMedian());
 		this.modeLabel.setText("Mode: " + findMode());
-		this.percentage90Label.setText("90%-100%: " + (numbers90Total / numbers90Count));
-		this.percentage80Label.setText("80%-89%: " + (numbers80Total / numbers80Count));
-		this.percentage70Label.setText("70%-79%: " + (numbers70Total / numbers70Count));
-		this.percentage60Label.setText("60%-69%: " + (numbers60Total / numbers60Count));
-		this.percentage50Label.setText("50%-59%: " + (numbers50Total / numbers50Count));
-		this.percentage40Label.setText("40%-49%: " + (numbers40Total / numbers40Count));
-		this.percentage30Label.setText("30%-39%: " + (numbers30Total / numbers30Count));
-		this.percentage20Label.setText("20%-29%: " + (numbers20Total / numbers20Count));
-		this.percentage10Label.setText("10%-19%: " + (numbers10Total / numbers10Count));
-		this.percentage0Label.setText("0%-9%: " + (numbers0Total / numbers0Count));
+		this.percentage90Label.setText("90%-100%: " + getDistributionAverage(numbers90Total, numbers90Count));
+		this.percentage80Label.setText("80%-89%: " + getDistributionAverage(numbers80Total, numbers80Count));
+		this.percentage70Label.setText("70%-79%: " + getDistributionAverage(numbers70Total, numbers70Count));
+		this.percentage60Label.setText("60%-69%: " + getDistributionAverage(numbers60Total, numbers60Count));
+		this.percentage50Label.setText("50%-59%: " + getDistributionAverage(numbers50Total, numbers50Count));
+		this.percentage40Label.setText("40%-49%: " + getDistributionAverage(numbers40Total, numbers40Count));
+		this.percentage30Label.setText("30%-39%: " + getDistributionAverage(numbers30Total, numbers30Count));
+		this.percentage20Label.setText("20%-29%: " + getDistributionAverage(numbers20Total, numbers20Count));
+		this.percentage10Label.setText("10%-19%: " + getDistributionAverage(numbers10Total, numbers10Count));
+		this.percentage0Label.setText("0%-9%: " + getDistributionAverage(numbers0Total, numbers0Count));
 	}
 
 	/**
@@ -1287,5 +1274,16 @@ public class MainFrame extends JFrame {
 		}
 		
 		return ret == Float.POSITIVE_INFINITY ? 0 : ret;
+	}
+	
+	private float getDistributionAverage(float total, int count) {
+		float average = 0;
+		
+		if(count != 0)
+		{
+			average = total / count;
+		}
+		
+		return average;
 	}
 }

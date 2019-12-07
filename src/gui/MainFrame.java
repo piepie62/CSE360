@@ -833,15 +833,23 @@ public class MainFrame extends JFrame {
 
 		ArrayList<Float> toRemoveList = new ArrayList<>();
 
+		clearPartitions();
+
 		for (float f : dataList) {
 			if (!checkBounds(f)) {
 				errors = errors + "\n" + f + " is not in range " + lower + "-" + upper;
 				toRemoveList.add(f);
 			}
+			else
+			{
+				calculatePartitions(f);
+			}
 		}
 
 		dataList.removeAll(toRemoveList);
 
+		setAnalytics();
+		setGraph();
 		this.updateTable();
 	}
 

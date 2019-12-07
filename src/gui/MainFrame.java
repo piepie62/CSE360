@@ -1239,6 +1239,7 @@ public class MainFrame extends JFrame {
 	}
 
 	private void setDataListToText() {
+		dataListText = "";
 		for (int add = 0; add < dataList.size(); add++) {
 			if (add % 4 == 0) {
 				dataListText += "\n";

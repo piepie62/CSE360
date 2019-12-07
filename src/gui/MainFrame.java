@@ -129,7 +129,8 @@ public class MainFrame extends JFrame {
 	String numbers80Bar = "";
 	String numbers90Bar = "";
 
-	String allActionsPerformed = "";
+	String allActionsPerformed = "ACTIONS PERFORMED:\n";
+	String dataListText = "\nGRADES:";
 
 	boolean firstData = true;
 	boolean addedValue = false;
@@ -621,6 +622,50 @@ public class MainFrame extends JFrame {
 		} else {
 			try (Writer summary = new BufferedWriter(new FileWriter(saveFile.getCanonicalPath()))) {
 				summary.write(allActionsPerformed);
+				setDataListToText();
+				summary.write(dataListText);
+				summary.write("\nANALYTICS\n"
+						+ "Number of Entries: " + dataList.size() + "\n"
+						+ "Max Grade: " + this.maxGrade + "\n"
+						+ "Min Grade: " + this.minGrade + "\n"
+						+ "Mean: " + findMean() + "\n"
+						+ "Median: " + findMedian() + "\n"
+						+ "Mode: " + findMode() + "\n"
+						+ "\nDISTRIBUTION\n"
+						+ "90%-100%: " + (numbers90Total / numbers90Count) + "\n"
+						+ "80%-89%: " + (numbers80Total / numbers80Count) + "\n"
+						+ "70%-79%: " + (numbers70Total / numbers70Count) + "\n"
+						+ "60%-69%: " + (numbers60Total / numbers60Count) + "\n"
+						+ "50%-59%: " + (numbers50Total / numbers50Count) + "\n"
+						+ "40%-49%: " + (numbers40Total / numbers40Count) + "\n"
+						+ "30%-39%: " + (numbers30Total / numbers30Count) + "\n"
+						+ "20%-29%: " + (numbers20Total / numbers20Count) + "\n"
+						+ "10%-19%: " + (numbers10Total / numbers10Count) + "\n"
+						+ "0%-9%: " + (numbers0Total / numbers0Count) + "\n");
+				summary.write("\nGRAPH OF NUMBER OF GRADES:\n"
+						+ "\t|\n" 
+						+ "90%-100%|" + calculateGraphBars(numbers90Bar, numbers90Count) + "|\n"
+						+ "\t|\n"
+						+ " 80%-89%|" + calculateGraphBars(numbers80Bar, numbers80Count) + "|\n"
+						+ "\t|\n"
+						+ " 70%-79%|" + calculateGraphBars(numbers70Bar, numbers70Count) + "|\n"
+						+ "\t|\n"
+						+ " 60%-69%|" + calculateGraphBars(numbers60Bar, numbers60Count) + "|\n"
+						+ "\t|\n"
+						+ " 50%-59%|" + calculateGraphBars(numbers50Bar, numbers50Count) + "|\n"
+						+ "\t|\n"
+						+ " 40%-49%|" + calculateGraphBars(numbers40Bar, numbers40Count) + "|\n"
+						+ "\t|\n"
+						+ " 30%-39%|" + calculateGraphBars(numbers30Bar, numbers30Count) + "|\n"
+						+ "\t|\n"
+						+ " 20%-29%|" + calculateGraphBars(numbers20Bar, numbers20Count) + "|\n"
+						+ "\t|\n"
+						+ " 10%-19%|" + calculateGraphBars(numbers10Bar, numbers10Count) + "|\n"
+						+ "\t|\n"
+						+ "   0%-9%|" + calculateGraphBars(numbers0Bar, numbers0Count) + "|\n"
+						+ "\t|___|___|___|___|___|___|___|___|___|___|___|___|\n"
+						+ "       \t0  10  20  30  40  50  60  70  80  90  100 110  MAX");
+				summary.write("\n\nERRORS:\n" + errors);
 				summary.close();
 			} catch (IOException e) {
 				errors += "\n" + e.getMessage();
@@ -1193,5 +1238,20 @@ public class MainFrame extends JFrame {
 				+ calculateGraphBars(numbers0Bar, numbers0Count) + "|\n"
 				+ "\t|___|___|___|___|___|___|___|___|___|___|___|___|\n"
 				+ "       \t0  10  20  30  40  50  60  70  80  90  100 110  MAX");
+	}
+	
+	private void setDataListToText()
+	{
+		for(int add = 0; add < dataList.size(); add++)
+		{
+			if(add % 4 == 0)
+			{
+				dataListText += "\n";
+			}
+			
+			dataListText += "\t" + dataList.get(add);
+		}
+		
+		dataListText += "\n";
 	}
 }
